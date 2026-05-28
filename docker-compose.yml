@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   # PostgreSQL Database
-  db:
+  postgres:  # تغییر نام از db به postgres
     image: postgres:15-alpine
     container_name: meeting_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME:-steel_db}
-      POSTGRES_USER: ${DB_USER:-steel_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-steel_pass_123}
+      POSTGRES_DB: ${POSTGRES_DB:-meeting_assistant}
+      POSTGRES_USER: ${POSTGRES_USER:-meeting_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meeting_pass_2024}
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -17,7 +17,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-steel_user} -d ${DB_NAME:-steel_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-meeting_user} -d ${POSTGRES_DB:-meeting_assistant}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,16 +35,16 @@ services:
       - media_volume:/app/media
     environment:
       - DEBUG=${DEBUG:-1}
-      - DJANGO_SETTINGS_MODULE=steel_middleeast.settings
-      - DB_NAME=${DB_NAME:-steel_db}
-      - DB_USER=${DB_USER:-steel_user}
-      - DB_PASSWORD=${DB_PASSWORD:-steel_pass_123}
-      - DB_HOST=db
+      - DJANGO_SETTINGS_MODULE=meeting_assistant.settings
+      - DB_NAME=${DB_NAME:-meeting_assistant}
+      - DB_USER=${DB_USER:-meeting_user}
+      - DB_PASSWORD=${DB_PASSWORD:-meeting_pass_123}
+      - DB_HOST=postgres
       - DB_PORT=5432
     ports:
       - "8000:8000"
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     command: ./entrypoint.sh
     networks:
@@ -206,7 +206,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -232,7 +232,7 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -265,12 +265,53 @@ services:
       retries: 3
 
 
+  # ============================================
+  # سرویس تبدیل صدا به متن (Whisper)
+  # ============================================
+  transcriber:
+    build:
+      context: ./transcriber
+      dockerfile: Dockerfile
+    container_name: meeting_transcriber
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+      - ./transcriber_models:/root/.cache/huggingface
+      - whisper_cache:/root/.cache/whisper
+    ports:
+      - "8001:8001"
+    networks:
+      - meeting_network
+    environment:
+      - MODEL_SIZE=base
+      - DEVICE=cpu
+      - COMPUTE_TYPE=int8
+      - CPU_THREADS=4
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+
 volumes:
   postgres_data:
   static_volume:
   media_volume:
   redis_data:
   ollama_data:
+  whisper_cache:
+  transcriber_models:
 
 
 
