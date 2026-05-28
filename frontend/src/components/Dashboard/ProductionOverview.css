@@ -1,0 +1,367 @@
+/* src/components/dashboard/ProductionOverview.css */
+
+/* Light Mode (Default) */
+:root {
+  --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  --card-bg: #ffffff;
+  --metric-bg: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --metric-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --hover-bg: #f8fafc;
+  --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  --progress-bg: #e2e8f0;
+}
+
+/* Dark Mode */
+[data-theme="dark"],
+.dark {
+  --card-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --card-bg: #1e293b;
+  --metric-bg: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --metric-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --hover-bg: #334155;
+  --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  --progress-bg: #334155;
+}
+
+.dashboard-card {
+  background: var(--card-gradient);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.dashboard-card:hover {
+  box-shadow: var(--hover-shadow);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title i {
+  font-size: 1.2rem;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.text-muted {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+}
+
+.btn-refresh-small {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-refresh-small:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(180deg);
+}
+
+.card-body {
+  padding: 24px;
+}
+
+/* 4 Cards Layout */
+.production-overview.four-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.metric-card {
+  background: var(--metric-bg);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--metric-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Light mode hover - white stays white, just shadow changes */
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hover-shadow);
+  background: var(--metric-bg);
+}
+
+[data-theme="dark"] .metric-card:hover,
+.dark .metric-card:hover {
+  background: var(--hover-bg);
+}
+
+.metric-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.metric-icon.primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.metric-icon.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.metric-icon.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.metric-icon.danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.metric-icon.info {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.2;
+}
+
+.metric-value .unit {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.metric-subtitle {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.metric-trend {
+  margin-top: 8px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.trend-up {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.trend-down {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Dark mode trends */
+[data-theme="dark"] .trend-up,
+.dark .trend-up {
+  background: rgba(22, 163, 74, 0.15);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .trend-down,
+.dark .trend-down {
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+}
+
+.progress-container {
+  margin-top: 12px;
+}
+
+.progress {
+  height: 8px;
+  background: var(--progress-bg);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: white;
+}
+
+.production-loading,
+.production-error {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.production-loading i,
+.production-error i {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.production-loading i {
+  color: #3b82f6;
+}
+
+.production-error i {
+  color: #ef4444;
+}
+
+.btn-retry-small {
+  margin-top: 12px;
+  padding: 6px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.btn-retry-small:hover {
+  background: #2563eb;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .production-overview.four-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .card-title {
+    justify-content: center;
+  }
+
+  .card-actions {
+    justify-content: center;
+  }
+
+  .production-overview.four-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .metric-card {
+    padding: 16px;
+  }
+
+  .metric-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .metric-value {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-body {
+    padding: 16px;
+  }
+
+  .metric-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .metric-trend {
+    align-self: center;
+  }
+
+  .progress-container {
+    width: 100%;
+  }
+}

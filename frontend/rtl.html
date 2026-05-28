@@ -1,0 +1,885 @@
+import React, { useEffect, useRef } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "animate.css/animate.min.css";
+import "./assets/css/normalize.css";
+import "./assets/css/all.min.css";
+import "./assets/css/main.css";
+import Chart from "chart.js/auto";
+
+const App = () => {
+  const chart5Ref = useRef(null);
+  const chart4Ref = useRef(null);
+  const chart2Ref = useRef(null);
+  const chartInstances = useRef({});
+
+  const toPersianNumber = (str) => {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+    return str.replace(/\d/g, (d) => persianDigits[d]);
+  };
+
+  useEffect(() => {
+    // Load weather widget
+    const weatherScript = document.createElement("script");
+    weatherScript.id = "weatherwidget-io-js";
+    weatherScript.src = "https://weatherwidget.io/js/widget.min.js";
+    document.body.appendChild(weatherScript);
+
+    // jQuery-dependent plugins
+    const loadJQueryPlugins = async () => {
+      if (!window.jQuery) {
+        const script = document.createElement("script");
+        script.src = "https://code.jquery.com/jquery-3.2.1.min.js";
+        script.onload = () => initPlugins();
+        document.body.appendChild(script);
+      } else {
+        initPlugins();
+      }
+    };
+
+    const initPlugins = () => {
+      window.jQuery && window.jQuery("body").bootstrapMaterialDesign();
+      window.jQuery && window.jQuery(".persianumber").persiaNumber();
+    };
+
+    loadJQueryPlugins();
+
+    // Initialize charts
+    const initCharts = () => {
+      Object.values(chartInstances.current).forEach((c) => c.destroy());
+
+      if (chart5Ref.current) {
+        chartInstances.current.chart5 = new Chart(chart5Ref.current, {
+          type: "bar",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May"].map(toPersianNumber),
+            datasets: [
+              {
+                label: "نمونه داده",
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                ],
+              },
+            ],
+          },
+        });
+      }
+
+      if (chart4Ref.current) {
+        chartInstances.current.chart4 = new Chart(chart4Ref.current, {
+          type: "doughnut",
+          data: {
+            labels: ["Red", "Blue", "Yellow"].map(toPersianNumber),
+            datasets: [
+              {
+                data: [300, 50, 100],
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+              },
+            ],
+          },
+        });
+      }
+
+      if (chart2Ref.current) {
+        chartInstances.current.chart2 = new Chart(chart2Ref.current, {
+          type: "polarArea",
+          data: {
+            labels: ["Red", "Green", "Yellow", "Grey", "Blue"].map(toPersianNumber),
+            datasets: [
+              {
+                data: [11, 16, 7, 3, 14],
+                backgroundColor: [
+                  "#FF6384",
+                  "#4BC0C0",
+                  "#FFCE56",
+                  "#E7E9ED",
+                  "#36A2EB",
+                ],
+              },
+            ],
+          },
+        });
+      }
+    };
+
+    initCharts();
+
+    return () => {
+      Object.values(chartInstances.current).forEach((c) => c.destroy());
+      weatherScript.remove();
+    };
+  }, []);
+
+  const toggleDarkMode = () => {
+    document.body.classList.toggle("dark-mode");
+  };
+
+  return (
+    <div className="avam-container animated persianumber rtl" dir="rtl">
+      {/* Header */}
+{/* Header */}
+      <header className="bmd-layout-header ">
+        <div className="navbar navbar-light bg-faded animate__animated animate__fadeInDown">
+          <button
+            className="navbar-toggler animate__animated animate__wobble animate__delay-2s"
+            type="button"
+            data-toggle="drawer"
+            data-target="#dw-s1"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
+          <ul className="nav navbar-nav p-0">
+            {/* Notification Dropdowns */}
+            <li className="nav-item">
+              <div className="dropdown">
+                <button
+                  className="btn  dropdown-toggle  m-0"
+                  type="button"
+                  id="dropdownMenu2"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i className="far fa-envelope fa-lg" />
+                  <span className="badge badge-pill badge-danger animate__animated animate__flash animate__repeat-3 animate__slower animate__delay-2s">
+                    5
+                  </span>
+                </button>
+                <div
+                  aria-labelledby="dropdownMenu2"
+                  className="dropdown-menu dropdown-menu-right dropdown-menu dropdown-menu-right-lg"
+                >
+                  <span className="dropdown-item dropdown-header">15 اطلاعیه</span>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-envelope c-main mr-2" /> 4 پیام جدید
+                    <span className="float-right-rtl text-muted text-sm">
+                      3 دقیقه پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-user c-main mr-2" /> 8 درخواست دوستی
+                    <span className="float-right-rtl text-muted text-sm">
+                      12 ساعت پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-file c-main mr-2" /> 3 گزارش جدید
+                    <span className="float-right-rtl text-muted text-sm">
+                      2 روز پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item dropdown-footer">
+                    دیدن همه
+                  </a>
+                </div>
+              </div>
+            </li>
+            {/* Bell Dropdown */}
+            <li className="nav-item">
+              <div className="dropdown">
+                <button
+                  className="btn  dropdown-toggle m-0"
+                  type="button"
+                  id="dropdownMenu3"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i className="far fa-bell  fa-lg " />
+                  <span className="badge badge-pill badge-warning animate__animated animate__flash animate__repeat-3 animate__slower animate__delay-2s">
+                    5
+                  </span>
+                </button>
+                <div
+                  aria-labelledby="dropdownMenu2"
+                  className="dropdown-menu dropdown-menu-right dropdown-menu dropdown-menu-right-lg"
+                >
+                  <span className="dropdown-item dropdown-header persianumber">
+                    15 اطلاعیه
+                  </span>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-envelope c-main mr-2" /> 4 پیام جدید
+                    <span className="float-right-rtl text-muted text-sm">
+                      3 دقیقه پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-user c-main mr-2" /> 8 درخواست دوستی
+                    <span className="float-right-rtl text-muted text-sm">
+                      12 ساعت پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item">
+                    <i className="far fa-file c-main mr-2" /> 3 گزارش جدید
+                    <span className="float-right-rtl text-muted text-sm">
+                      2 روز پیش
+                    </span>
+                  </a>
+                  <div className="dropdown-divider" />
+                  <a href="#" className="dropdown-item dropdown-footer">
+                    دیدن همه
+                  </a>
+                </div>
+              </div>
+            </li>
+            {/* User Profile */}
+            <li className="nav-item">
+              <img
+                src="src/assets/img/user-profile.jpg"
+                alt="..."
+                className="rounded-circle screen-user-profile"
+              />
+            </li>
+            <li className="nav-item">
+              <div className="dropdown">
+                <button
+                  className="btn  dropdown-toggle m-0"
+                  type="button"
+                  id="dropdownMenu4"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  مجید
+                </button>
+                <div
+                  aria-labelledby="dropdownMenu4"
+                  className="dropdown-menu  pl-3 dropdown-menu-right dropdown-menu dropdown-menu-right"
+                >
+                  <button className="dropdown-item" type="button">
+                    <i className="far fa-user c-main fa-sm mr-2" />
+                    پروفایل
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    type="button"
+
+                  >
+                    <i className="fas fa-moon fa-sm c-main mr-2" />
+                    حالت شب
+                  </button>
+                  <button className="dropdown-item" type="button">
+                    <i className="fas fa-cog c-main fa-sm mr-2" />
+                    تنظیمات
+                  </button>
+                  <button className="dropdown-item" type="button">
+                    <i className="fas fa-sign-out-alt c-main fa-sm mr-2" />
+                    خروج
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </header>
+
+      {/* Layout: Sidebar + Main Content */}
+      <div className="bmd-layout-container d-flex" style={{ minHeight: "100vh" }}>
+
+        {/* Sidebar */}
+        <aside id="dw-s1" className="bmd-layout-drawer bg-faded flex-shrink-0" style={{ width: "250px" }}>
+          <div className="container-fluid side-bar-container">
+            <div id="dw-s1" className="bmd-layout-drawer bg-faded ">
+        <div className="container-fluid side-bar-container ">
+          <div className="container-fluid side-bar-container ">
+            <header className="pb-0">
+              <a className="navbar-brand ">
+                <object
+                  className="side-logo"
+                  data="src/assets/svg/logo-8.svg"
+                  type="image/svg+xml"
+                ></object>
+              </a>
+            </header>
+            <p className="side-comment  fnt-mxs">گشت</p>
+            <li className="side a-collapse short m-2 pr-1 pl-1">
+              <a href="./fa.html" className="side-item selected c-dark ">
+                <i className="fas fa-language  mr-1" />
+                فارسی <span className="badge badge-pill badge-success">جدید</span>
+              </a>
+            </li>
+            <ul className="side a-collapse short ">
+              <a className="ul-text  fnt-mxs">
+                <i className="fas fa-tachometer-alt mr-1" /> صفحه
+                <i className="fas fa-chevron-down arrow" />
+              </a>
+              <div className="side-item-container hide animated">
+                <li className="side-item ">
+                  <a href="./" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    پنل کاربری
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./dark.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    پنل کاربری تاریک
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./Login.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    صفحه ورود
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./glogin.html">
+                    <i className="fas fa-angle-right mr-2" />
+                    صفحه ورود رنگی
+                  </a>
+                </li>
+              </div>
+            </ul>
+            <ul className="side a-collapse short">
+              <a className="ul-text  fnt-mxs">
+                <i className="fas fa-cog mr-1" /> شخصی سازی
+                <i className="fas fas fa-chevron-down arrow" />
+              </a>
+              <div className="side-item-container hide animated">
+                <li className="side-item">
+                  <a href="./color.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    رنگ
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./typo.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    تایپوکرافی
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./dark-mode.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    حالت شب
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./rtl.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    راست چین
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./sidebar.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    ساید بار
+                  </a>
+                </li>
+              </div>
+            </ul>
+            <p className="side-comment  fnt-mxs">عناصر</p>
+            <li className="side a-collapse short ">
+              <a href="./animation.html" className="side-item ">
+                <i className="fas fa-fan fa-spin mr-1" />
+                انیمشین
+              </a>
+            </li>
+            <li className="side a-collapse short ">
+              <a href="./Icon.html" className="side-item ">
+                <i className="fas fa-icons  mr-1" />
+                آیکون
+              </a>
+            </li>
+            <ul className="side a-collapse short ">
+              <a className="ul-text  fnt-mxs">
+                <i className="fas fa-cube mr-1" /> کامپوننت های پایه{" "}
+                <span className="badge badge-danger">9</span>
+                <i className="fas fas fa-chevron-down arrow" />
+              </a>
+              <div className="side-item-container hide animated">
+                <li className="side-item">
+                  <a href="./alert.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    alert
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./badge.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Badge
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./breadcrumb.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Breadcrumb
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./button.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Button
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./card.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Card
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./collapse.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Collapse
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./Input.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Input
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./jumborton.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Jumborton
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./pagination.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Pagination
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./progress.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Progress
+                  </a>
+                </li>
+              </div>
+            </ul>
+            <ul className="side a-collapse short">
+              <a className="ul-text  fnt-mxs">
+                <i className="fas fa-layer-group mr-1" />
+                کامپوننت های اضافی
+                <i className="fas fas fa-chevron-down arrow" />
+              </a>
+              <div className="side-item-container hide animated">
+                <li className="side-item">
+                  <a href="./modal.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Modal
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./toast.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Toast
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./widget.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Widget
+                  </a>
+                </li>
+                <li className="side-item">
+                  <a href="./Chart.html" className="fnt-mxs">
+                    <i className="fas fa-angle-right mr-2" />
+                    Chart
+                  </a>
+                </li>
+              </div>
+            </ul>
+            <p className="side-comment  fnt-mxs">پشتیبانی</p>
+            <li className="side a-collapse short ">
+              <a
+                href="https://github.com/MajidAlinejad/Nozha-rtl-Dashboard"
+                className="side-item  fnt-mxs "
+              >
+                <i className=" fab fa-github mr-1" />
+                GitHub
+              </a>
+            </li>
+            <li className="side a-collapse short ">
+              <a
+                href="https://github.com/MajidAlinejad/Nozha-rtl-Dashboard"
+                className="side-item  fnt-mxs "
+              >
+                <i className=" far fa-question-circle mr-1" />
+                گزارش باگ
+              </a>
+            </li>
+            <li className="side a-collapse short ">
+              <a
+                href="https://github.com/MajidAlinejad/Nozha-rtl-Dashboard"
+                className="side-item  fnt-mxs "
+              >
+                <i className=" far fa-life-ring mr-1" />
+                حل مشکل
+              </a>
+            </li>
+            <p className="side-comment  fnt-mxs">اهدا</p>
+            <li className="side a-collapse short pb-5">
+              <a
+                href="https://donateon.ir/alinejad.mj"
+                className="side-item  fnt-mxs "
+              >
+                <i className=" fas fa-coffee mr-1" />
+                کمک به توسعه دهنده{" "}
+              </a>
+            </li>
+          </div>
+        </div>
+      </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+
+        <main className="bmd-layout-content flex-grow-1">
+
+          <div className="container-fluid">
+            {/* Dashboard content */}
+            <br />
+            <br />
+            <div className="container-fluid" dir="rtl">
+              {/* Widgets */}
+            <div className="row m-1 mb-2">
+              <div className="col-xl-3 col-md-6 col-sm-6 p-2">
+                <div className="box-card text-right mini animate__animated animate__flipInY">
+                  <i className="fab far fa-chart-bar b-first" aria-hidden="true"></i>
+                  <span className="mb-1 c-first">امتیاز</span>
+                  <span>30%</span>
+                  <p className="mt-3 mb-1 text-right">
+                    <i className="far fas fa-wallet mr-1 c-first"></i> در حال پیشرفت
+                  </p>
+                </div>
+              </div>
+                {/* ... repeat other widgets ... */}
+                    <div className="col-xl-3 col-md-6 col-sm-6 p-2">
+                <div className="box-card text-right mini animate__animated animate__flipInY">
+                  <i className="fab far fa-clock b-second" aria-hidden="true"></i>
+                  <span className="mb-1 c-second">بازدید</span>
+                  <span>27</span>
+                  <p className="mt-3 mb-1 text-right">
+                    <i className="far fas fa-wifi mr-1 c-second"></i> در حال پیشرفت
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 col-sm-6 p-2">
+                <div className="box-card text-right mini animate__animated animate__flipInY">
+                  <i className="fab far fa-comments b-third" aria-hidden="true"></i>
+                  <span className="mb-1 c-third">پیام ها</span>
+                  <span>5</span>
+                  <p className="mt-3 mb-1 text-right">
+                    <i className="fab fa-whatsapp mr-1 c-third"></i> در حال پیشرفت
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-6 col-sm-6 p-2">
+                <div className="box-card text-right mini animate__animated animate__flipInY">
+                  <i className="fab far fa-gem b-forth" aria-hidden="true"></i>
+                  <span className="mb-1 c-forth">منابع</span>
+                  <span>55,223</span>
+                  <p className="mt-3 mb-1 text-right">
+                    <i className="fab fa-bluetooth mr-1 c-forth"></i> در حال پیشرفت
+                  </p>
+                </div>
+              </div>
+
+              </div>
+
+
+            {/* alert */}
+            <div className="row m-2 mb-1">
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-2">
+                <div
+                  className="alert text-dir-rtl text-right alert-third alert-shade alert-dismissible fade show"
+                  role="alert"
+                >
+                  <strong>هشدار!</strong> این یک متن هشدار است.
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+
+                        <div className="row m-1">
+              <div className="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
+                <div className="card shade h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">نمودار بار/خط</h5>
+                    <hr />
+                    <canvas id="myChart5"></canvas>
+                    <hr className="hr-dashed" />
+                    <p className="text-center c-danger">یک نمونه از نمودار</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">
+                <div className="card flat f-first h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">افزونه آب و هوا</h5>
+                    <hr />
+                    <a className="weatherwidget-io" href="https://forecast7.com/en/37d5545d08/urmia/"
+                      data-label_1="URMIA" data-label_2="WEATHER" data-icons="Climacons Animated"
+                      data-days="5" data-textcolor="#fafafaad"></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row mb-2 m-2">
+              <div className="col-xl-8 col-md-6 col-sm-6 p-2">
+                <div className="box-dash h-100 pastel animate__animated animate__flipInY b-second">
+                  <i className="fab far fa-clock" aria-hidden="true"></i>
+                  <span>27</span>
+                  <hr className="m-0" />
+                  <span>بازدید</span>
+                  <a href="#" className="small-box-footer">اطلاعات بیشتر <i
+                      className="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <div className="col-xl-4 col-md-6 col-sm-6 p-2">
+                <div className="box-card h-100 flat f-main animate__animated animate__flipInY">
+                  <iframe
+                    src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Asia%2FTehran"
+                    width="100%" height="115" frameBorder="0" seamless></iframe>
+                </div>
+              </div>
+            </div>
+
+            <div className="row m-1">
+              <div className="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">
+                <div className="card shade h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">نمودار دایره ای</h5>
+                    <hr />
+                    <canvas id="myChart4" width="10" height="11"></canvas>
+                    <hr className="hr-dashed" />
+                    <p className="text-center c-danger">نمونه ای از نمودار</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
+                <div className="card shade h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">اطلاعات در قالب جدول</h5>
+                    <hr />
+                    <table className="table table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">ردیف</th>
+                          <th scope="col">نام</th>
+                          <th scope="col">نام خانوادگی</th>
+                          <th scope="col">منشن</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <td>مارک</td>
+                          <td>لنترن</td>
+                          <td>@mdo</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>جیکوب</td>
+                          <td>رایان</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>لری</td>
+                          <td>اسمیت</td>
+                          <td>@twitter</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>جیکوب</td>
+                          <td>رایان</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>لری</td>
+                          <td>اسمیت</td>
+                          <td>@twitter</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">2</th>
+                          <td>جیکوب</td>
+                          <td>رایان</td>
+                          <td>@fat</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">3</th>
+                          <td>لری</td>
+                          <td>اسمیت</td>
+                          <td>@twitter</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="row m-1">
+              <div className="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
+                <div className="alert col-12 alert-success alert-shade-white bd-side alert-dismissible fade show"
+                  role="alert">
+                  <strong>هشدار!</strong>این یک متن هشدار است.
+                </div>
+                <div id="accordion" className="accordion card shade outlined o-forth w-100">
+                  <div className="">
+                    <div className="card-header mr-3 ml-3 pr-0 pl-0" id="headingOne">
+                      <h5 className="mb-0">
+                        <button className="btn btn-link c-grey w-100 m-0 text-right" data-toggle="collapse"
+                          data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          عنوان شماره یک
+                          <i className="fas fa-chevron-right"></i>
+                        </button>
+                      </h5>
+                    </div>
+
+                    <div id="collapseOne" className="collapse show" aria-labelledby="headingOne"
+                      data-parent="#accordion">
+                      <div className="card-body">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
+                        طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                        لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود
+                        ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،
+                        شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای
+                        طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد،
+                        در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط
+                        سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی
+                        سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="card-header mr-3 ml-3 pr-0 pl-0" id="headingTwo">
+                      <h5 className="mb-0">
+                        <button className="btn btn-link c-grey collapsed w-100 m-0 text-right"
+                          data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                          aria-controls="collapseTwo">
+                          عنوان شماره دو
+                          <i className="fas fa-chevron-right"></i>
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo"
+                      data-parent="#accordion">
+                      <div className="card-body">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
+                        طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                        لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود
+                        ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،
+                        شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای
+                        طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد،
+                        در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط
+                        سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی
+                        سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="card-header mr-3 ml-3 pr-0 pl-0" id="headingThree">
+                      <h5 className="mb-0">
+                        <button className="btn btn-link c-grey collapsed w-100 m-0 text-right"
+                          data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                          aria-controls="collapseThree">
+                          عنوان شماره سه
+                          <i className="fas fa-chevron-right"></i>
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseThree" className="collapse" aria-labelledby="headingThree"
+                      data-parent="#accordion">
+                      <div className="card-body">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
+                        طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
+                        لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود
+                        ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،
+                        شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای
+                        طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد،
+                        در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط
+                        سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی
+                        سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 p-2">
+                <div className="card shade h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">نمودار قطبی</h5>
+                    <hr />
+                    <canvas id="myChart2" width="10" height="13"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+              {/* Charts */}
+              <div className="row m-1">
+                <div className="col-md-8 p-2">
+                  <div className="card shade h-100">
+                    <div className="card-body">
+                      <h5 className="card-title">نمودار بار/خط</h5>
+                      <hr />
+                      <canvas ref={chart5Ref}></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-4 p-2">
+                  <div className="card shade h-100">
+                    <div className="card-body">
+                      <h5 className="card-title">نمودار دایره ای</h5>
+                      <hr />
+                      <canvas ref={chart4Ref}></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row m-1">
+                <div className="col-md-4 p-2">
+                  <div className="card shade h-100">
+                    <div className="card-body">
+                      <h5 className="card-title">نمودار قطبی</h5>
+                      <hr />
+                      <canvas ref={chart2Ref}></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Remaining content (tables, accordion, widgets) stays the same */}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default App;

@@ -1,43 +1,19 @@
-# مرحله 1: Build stage
-FROM node:18-alpine as builder
+#FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-# کپی package.json ها
+# کپی فایل‌های package
 COPY package*.json ./
-COPY yarn.lock* ./
 
-# نصب dependencies
-RUN npm ci --only=production --silent || npm install --silent
+# نصب وابستگی‌ها
+RUN npm install --legacy-peer-deps
 
-# کپی سورس کد
+# کپی بقیه فایل‌های پروژه
 COPY . .
 
-# بیلد کردن اپلیکیشن React
-RUN npm run build
+# expose پورت Vite (پیش‌فرض 5173 است، اما شما در compose پورت 3000 را تنظیم کرده‌اید)
+EXPOSE 3000
 
-# مرحله 2: Production stage با Nginx
-FROM nginx:alpine
-
-# نصب curl برای healthcheck
-RUN apk add --no-cache curl
-
-# کپی فایل build شده از مرحله builder
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# کپی کانفیگ سفارشی Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# کپی اسکریپت entrypoint
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# پورت سرویس
-EXPOSE 80
-
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+# اجرای Vite در حالت development با پورت مشخص
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]

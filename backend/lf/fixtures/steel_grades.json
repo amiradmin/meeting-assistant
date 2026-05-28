@@ -1,0 +1,83 @@
+# lf/fixtures/steel_grades.json
+[
+  {
+    "model": "lf.steelgrade",
+    "pk": 1,
+    "fields": {
+      "code": "ST37-2",
+      "name": "Structural Steel St37-2",
+      "description": "General structural steel",
+      "temp_min": 1570,
+      "temp_target": 1580,
+      "temp_max": 1590,
+      "analysis_limits": {},
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 2,
+    "fields": {
+      "code": "ST52-3",
+      "name": "Structural Steel St52-3",
+      "description": "High strength structural steel",
+      "temp_min": 1590,
+      "temp_target": 1600,
+      "temp_max": 1610,
+      "analysis_limits": {},
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 3,
+    "fields": {
+      "code": "CK45",
+      "name": "Carbon Steel CK45",
+      "description": "Medium carbon steel",
+      "temp_min": 1600,
+      "temp_target": 1610,
+      "temp_max": 1620,
+      "analysis_limits": {},
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 5,
+    "fields": {
+      "code": "42CrMo4",
+      "name": "Alloy Steel 42CrMo4",
+      "description": "Chromium-molybdenum alloy steel",
+      "temp_min": 1600,
+      "temp_target": 1610,
+      "temp_max": 1620,
+      "analysis_limits": {},
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 8,
+    "fields": {
+      "code": "100Cr6",
+      "name": "Bearing Steel 100Cr6",
+      "description": "High carbon chromium bearing steel",
+      "temp_min": 1620,
+      "temp_target": 1630,
+      "temp_max": 1640,
+      "analysis_limits": {},
+      "is_active": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  }
+]

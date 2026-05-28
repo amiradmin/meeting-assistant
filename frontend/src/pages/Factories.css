@@ -1,0 +1,53 @@
+/* کلیت صفحه */
+.factories-page {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Vazir', sans-serif; /* اگر فونت فارسی دارید */
+}
+
+/* دکمه‌ها در جدول */
+.action-btn + .action-btn {
+  margin-right: 0.5rem;
+}
+
+.custom-btn-outline {
+  border-radius: 5px !important;
+  padding: 0.35rem 1rem !important;
+  font-size: 0.85rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-btn-outline:hover {
+  transform: translateY(-1px);
+}
+
+/* مودال RTL */
+.rtl-modal {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ورودی‌های جستجو */
+.rtl-input {
+  text-align: right;
+  direction: rtl;
+}
+
+/* لوکیشن سلکت زیباتر */
+.location-select {
+  border-radius: 5px !important;
+  padding: 0.4rem 1rem !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.location-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 6px rgba(25, 135, 84, 0.4);
+}
+
+/* جدول */
+.table th,
+.table td {
+  vertical-align: middle;
+}

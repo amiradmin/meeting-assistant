@@ -1,0 +1,499 @@
+[
+  {
+    "model": "lf.steelgrade",
+    "pk": 1,
+    "fields": {
+      "code": "ST37-2",
+      "name": "Structural Steel St37-2",
+      "description": "General structural steel",
+      "temp_min": 1570,
+      "temp_target": 1580,
+      "temp_max": 1590,
+      "analysis_limits": {
+        "C": {"min": 0.08, "max": 0.12, "target": 0.10},
+        "Mn": {"min": 0.40, "max": 0.60, "target": 0.50},
+        "Si": {"min": 0.15, "max": 0.30, "target": 0.22},
+        "P": {"min": 0, "max": 0.035},
+        "S": {"min": 0, "max": 0.035}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 2,
+    "fields": {
+      "code": "ST52-3",
+      "name": "Structural Steel St52-3",
+      "description": "High strength structural steel",
+      "temp_min": 1590,
+      "temp_target": 1600,
+      "temp_max": 1610,
+      "analysis_limits": {
+        "C": {"min": 0.12, "max": 0.18, "target": 0.15},
+        "Mn": {"min": 0.90, "max": 1.20, "target": 1.05},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "P": {"min": 0, "max": 0.030},
+        "S": {"min": 0, "max": 0.030}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 3,
+    "fields": {
+      "code": "CK45",
+      "name": "Carbon Steel CK45",
+      "description": "Medium carbon steel",
+      "temp_min": 1600,
+      "temp_target": 1610,
+      "temp_max": 1620,
+      "analysis_limits": {
+        "C": {"min": 0.42, "max": 0.50, "target": 0.46},
+        "Mn": {"min": 0.50, "max": 0.80, "target": 0.65},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "P": {"min": 0, "max": 0.025},
+        "S": {"min": 0, "max": 0.025}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 4,
+    "fields": {
+      "code": "16MnCr5",
+      "name": "Alloy Steel 16MnCr5",
+      "description": "Case hardening steel",
+      "temp_min": 1610,
+      "temp_target": 1620,
+      "temp_max": 1630,
+      "analysis_limits": {
+        "C": {"min": 0.14, "max": 0.19, "target": 0.16},
+        "Mn": {"min": 1.00, "max": 1.30, "target": 1.15},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "P": {"min": 0, "max": 0.025},
+        "S": {"min": 0, "max": 0.025}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 5,
+    "fields": {
+      "code": "42CrMo4",
+      "name": "Alloy Steel 42CrMo4",
+      "description": "High strength alloy steel",
+      "temp_min": 1600,
+      "temp_target": 1610,
+      "temp_max": 1620,
+      "analysis_limits": {
+        "C": {"min": 0.38, "max": 0.45, "target": 0.42},
+        "Mn": {"min": 0.60, "max": 0.90, "target": 0.75},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "P": {"min": 0, "max": 0.025},
+        "S": {"min": 0, "max": 0.025}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 6,
+    "fields": {
+      "code": "C22",
+      "name": "Carbon Steel C22",
+      "description": "Low carbon steel for general use",
+      "temp_min": 1580,
+      "temp_target": 1590,
+      "temp_max": 1600,
+      "analysis_limits": {
+        "C": {"min": 0.17, "max": 0.24, "target": 0.20},
+        "Mn": {"min": 0.30, "max": 0.60, "target": 0.45},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "P": {"min": 0, "max": 0.035},
+        "S": {"min": 0, "max": 0.035}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 7,
+    "fields": {
+      "code": "S355J2",
+      "name": "Structural Steel S355J2",
+      "description": "High strength structural steel for low temperature",
+      "temp_min": 1590,
+      "temp_target": 1600,
+      "temp_max": 1610,
+      "analysis_limits": {
+        "C": {"min": 0.12, "max": 0.20, "target": 0.16},
+        "Mn": {"min": 0.90, "max": 1.60, "target": 1.25},
+        "Si": {"min": 0.15, "max": 0.55, "target": 0.35},
+        "P": {"min": 0, "max": 0.025},
+        "S": {"min": 0, "max": 0.025}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "lf.steelgrade",
+    "pk": 8,
+    "fields": {
+      "code": "100Cr6",
+      "name": "Bearing Steel 100Cr6",
+      "description": "High carbon chromium bearing steel",
+      "temp_min": 1620,
+      "temp_target": 1630,
+      "temp_max": 1640,
+      "analysis_limits": {
+        "C": {"min": 0.93, "max": 1.05, "target": 1.00},
+        "Mn": {"min": 0.20, "max": 0.45, "target": 0.35},
+        "Si": {"min": 0.15, "max": 0.35, "target": 0.25},
+        "Cr": {"min": 1.35, "max": 1.60, "target": 1.50},
+        "P": {"min": 0, "max": 0.025},
+        "S": {"min": 0, "max": 0.015}
+      },
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+
+  {
+    "model": "lf.lfheat",
+    "pk": 1,
+    "fields": {
+      "heat_number": 1245,
+      "steel_grade": 2,
+      "furnace_id": 1,
+      "liquid_weight": 125.5,
+      "target_liquid_weight": 120.0,
+      "status": "completed",
+      "current_phase": "tapping",
+      "start_time": "2026-04-27T06:00:00Z",
+      "end_time": "2026-04-27T09:30:00Z",
+      "phase_start_time": "2026-04-27T09:15:00Z",
+      "heating_power": 18.5,
+      "argon_flow": 150,
+      "electrode_position": 450,
+      "production_standard": "LF_STD_FAST",
+      "operator_name": "John Smith",
+      "shift_id": "SHIFT_A",
+      "notes": "First heat of the day - ST52-3",
+      "created_at": "2026-04-27T06:00:00Z",
+      "updated_at": "2026-04-27T09:30:00Z"
+    }
+  },
+  {
+    "model": "lf.lfheat",
+    "pk": 2,
+    "fields": {
+      "heat_number": 1246,
+      "steel_grade": 3,
+      "furnace_id": 1,
+      "liquid_weight": 128.0,
+      "target_liquid_weight": 122.0,
+      "status": "completed",
+      "current_phase": "completed",
+      "start_time": "2026-04-27T10:00:00Z",
+      "end_time": "2026-04-27T13:15:00Z",
+      "phase_start_time": "2026-04-27T13:00:00Z",
+      "heating_power": 19.2,
+      "argon_flow": 160,
+      "electrode_position": 460,
+      "production_standard": "LF_STD_PRECISE",
+      "operator_name": "John Smith",
+      "shift_id": "SHIFT_A",
+      "notes": "CK45 - precise temperature control",
+      "created_at": "2026-04-27T10:00:00Z",
+      "updated_at": "2026-04-27T13:15:00Z"
+    }
+  },
+  {
+    "model": "lf.lfheat",
+    "pk": 3,
+    "fields": {
+      "heat_number": 1247,
+      "steel_grade": 5,
+      "furnace_id": 1,
+      "liquid_weight": 130.0,
+      "target_liquid_weight": 125.0,
+      "status": "running",
+      "current_phase": "alloying",
+      "start_time": "2026-04-27T14:00:00Z",
+      "end_time": null,
+      "phase_start_time": "2026-04-27T15:15:00Z",
+      "heating_power": 20.0,
+      "argon_flow": 170,
+      "electrode_position": 470,
+      "production_standard": "LF_STD_FAST",
+      "operator_name": "Sarah Johnson",
+      "shift_id": "SHIFT_B",
+      "notes": "42CrMo4 - alloying in progress",
+      "created_at": "2026-04-27T14:00:00Z",
+      "updated_at": "2026-04-27T15:15:00Z"
+    }
+  },
+  {
+    "model": "lf.lfheat",
+    "pk": 4,
+    "fields": {
+      "heat_number": 1248,
+      "steel_grade": 7,
+      "furnace_id": 2,
+      "liquid_weight": 132.0,
+      "target_liquid_weight": 128.0,
+      "status": "running",
+      "current_phase": "heating",
+      "start_time": "2026-04-27T13:30:00Z",
+      "end_time": null,
+      "phase_start_time": "2026-04-27T13:45:00Z",
+      "heating_power": 17.8,
+      "argon_flow": 145,
+      "electrode_position": 440,
+      "production_standard": "LF_STD_STANDARD",
+      "operator_name": "Mike Brown",
+      "shift_id": "SHIFT_B",
+      "notes": "S355J2 - structural steel",
+      "created_at": "2026-04-27T13:30:00Z",
+      "updated_at": "2026-04-27T13:45:00Z"
+    }
+  },
+  {
+    "model": "lf.lfheat",
+    "pk": 5,
+    "fields": {
+      "heat_number": 1249,
+      "steel_grade": 8,
+      "furnace_id": 2,
+      "liquid_weight": 115.0,
+      "target_liquid_weight": 110.0,
+      "status": "pending",
+      "current_phase": "preparation",
+      "start_time": null,
+      "end_time": null,
+      "phase_start_time": null,
+      "heating_power": 16.0,
+      "argon_flow": 140,
+      "electrode_position": 430,
+      "production_standard": "LF_STD_PRECISE",
+      "operator_name": null,
+      "shift_id": "SHIFT_C",
+      "notes": "100Cr6 - bearing steel - waiting for ladle",
+      "created_at": "2026-04-27T16:00:00Z",
+      "updated_at": "2026-04-27T16:00:00Z"
+    }
+  },
+
+  {
+    "model": "lf.lftemperature",
+    "pk": 1,
+    "fields": {"heat": 1, "temperature": 1560, "oxygen_activity": 380, "energy_supplied": 0, "phase": "heating", "measured_at": "2026-04-27T06:15:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 2,
+    "fields": {"heat": 1, "temperature": 1575, "oxygen_activity": 365, "energy_supplied": 18, "phase": "heating", "measured_at": "2026-04-27T06:30:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 3,
+    "fields": {"heat": 1, "temperature": 1588, "oxygen_activity": 350, "energy_supplied": 35, "phase": "heating", "measured_at": "2026-04-27T06:50:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 4,
+    "fields": {"heat": 1, "temperature": 1595, "oxygen_activity": 340, "energy_supplied": 52, "phase": "heating", "measured_at": "2026-04-27T07:10:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 5,
+    "fields": {"heat": 1, "temperature": 1600, "oxygen_activity": 335, "energy_supplied": 68, "phase": "holding", "measured_at": "2026-04-27T07:35:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 6,
+    "fields": {"heat": 1, "temperature": 1602, "oxygen_activity": 330, "energy_supplied": 75, "phase": "tapping", "measured_at": "2026-04-27T09:00:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 7,
+    "fields": {"heat": 2, "temperature": 1570, "oxygen_activity": 390, "energy_supplied": 0, "phase": "heating", "measured_at": "2026-04-27T10:15:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 8,
+    "fields": {"heat": 2, "temperature": 1590, "oxygen_activity": 370, "energy_supplied": 25, "phase": "heating", "measured_at": "2026-04-27T10:45:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 9,
+    "fields": {"heat": 2, "temperature": 1605, "oxygen_activity": 355, "energy_supplied": 50, "phase": "heating", "measured_at": "2026-04-27T11:15:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 10,
+    "fields": {"heat": 2, "temperature": 1610, "oxygen_activity": 345, "energy_supplied": 68, "phase": "holding", "measured_at": "2026-04-27T11:50:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 11,
+    "fields": {"heat": 2, "temperature": 1612, "oxygen_activity": 340, "energy_supplied": 72, "phase": "tapping", "measured_at": "2026-04-27T12:45:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 12,
+    "fields": {"heat": 3, "temperature": 1565, "oxygen_activity": 385, "energy_supplied": 0, "phase": "heating", "measured_at": "2026-04-27T14:10:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 13,
+    "fields": {"heat": 3, "temperature": 1580, "oxygen_activity": 370, "energy_supplied": 20, "phase": "heating", "measured_at": "2026-04-27T14:35:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 14,
+    "fields": {"heat": 3, "temperature": 1595, "oxygen_activity": 360, "energy_supplied": 40, "phase": "heating", "measured_at": "2026-04-27T15:00:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 15,
+    "fields": {"heat": 4, "temperature": 1562, "oxygen_activity": 375, "energy_supplied": 0, "phase": "heating", "measured_at": "2026-04-27T13:45:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 16,
+    "fields": {"heat": 4, "temperature": 1582, "oxygen_activity": 360, "energy_supplied": 22, "phase": "heating", "measured_at": "2026-04-27T14:20:00Z"}
+  },
+  {
+    "model": "lf.lftemperature",
+    "pk": 17,
+    "fields": {"heat": 4, "temperature": 1598, "oxygen_activity": 348, "energy_supplied": 42, "phase": "heating", "measured_at": "2026-04-27T15:00:00Z"}
+  },
+
+  {
+    "model": "lf.lfanalysis",
+    "pk": 1,
+    "fields": {"heat": 1, "sample_id": "A001", "c": 0.08, "mn": 0.35, "si": 0.15, "p": 0.022, "s": 0.028, "cr": 0.05, "ni": 0.03, "mo": 0.02, "al": 0.01, "sample_time": "2026-04-27T06:25:00Z", "analysis_time": "2026-04-27T06:30:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 2,
+    "fields": {"heat": 1, "sample_id": "A002", "c": 0.11, "mn": 0.65, "si": 0.22, "p": 0.020, "s": 0.025, "cr": 0.06, "ni": 0.03, "mo": 0.02, "al": 0.02, "sample_time": "2026-04-27T07:00:00Z", "analysis_time": "2026-04-27T07:05:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 3,
+    "fields": {"heat": 1, "sample_id": "A003", "c": 0.14, "mn": 0.88, "si": 0.28, "p": 0.018, "s": 0.022, "cr": 0.06, "ni": 0.03, "mo": 0.02, "al": 0.03, "sample_time": "2026-04-27T08:00:00Z", "analysis_time": "2026-04-27T08:05:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 4,
+    "fields": {"heat": 2, "sample_id": "B001", "c": 0.35, "mn": 0.45, "si": 0.18, "p": 0.018, "s": 0.022, "cr": 0.08, "ni": 0.04, "mo": 0.02, "al": 0.02, "sample_time": "2026-04-27T10:30:00Z", "analysis_time": "2026-04-27T10:35:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 5,
+    "fields": {"heat": 2, "sample_id": "B002", "c": 0.42, "mn": 0.60, "si": 0.22, "p": 0.016, "s": 0.020, "cr": 0.10, "ni": 0.04, "mo": 0.02, "al": 0.03, "sample_time": "2026-04-27T11:20:00Z", "analysis_time": "2026-04-27T11:25:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 6,
+    "fields": {"heat": 2, "sample_id": "B003", "c": 0.46, "mn": 0.68, "si": 0.25, "p": 0.015, "s": 0.018, "cr": 0.08, "ni": 0.04, "mo": 0.02, "al": 0.04, "sample_time": "2026-04-27T12:10:00Z", "analysis_time": "2026-04-27T12:15:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 7,
+    "fields": {"heat": 3, "sample_id": "C001", "c": 0.30, "mn": 0.55, "si": 0.20, "p": 0.020, "s": 0.024, "cr": 0.85, "ni": 0.05, "mo": 0.15, "al": 0.02, "sample_time": "2026-04-27T14:50:00Z", "analysis_time": "2026-04-27T14:55:00Z"}
+  },
+  {
+    "model": "lf.lfanalysis",
+    "pk": 8,
+    "fields": {"heat": 4, "sample_id": "D001", "c": 0.14, "mn": 1.10, "si": 0.30, "p": 0.022, "s": 0.026, "cr": 0.08, "ni": 0.03, "mo": 0.02, "al": 0.02, "sample_time": "2026-04-27T14:15:00Z", "analysis_time": "2026-04-27T14:20:00Z"}
+  },
+
+  {
+    "model": "lf.lfaddition",
+    "pk": 1,
+    "fields": {"heat": 1, "material_code": "FeMn_LC", "material_name": "Low Carbon Ferro Manganese", "standard_qty": 850, "calculated_qty": 820, "confirmed_qty": 820, "actual_qty": 815, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T07:20:00Z", "confirmed_at": "2026-04-27T07:18:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 2,
+    "fields": {"heat": 1, "material_code": "FeSi", "material_name": "Ferro Silicon", "standard_qty": 420, "calculated_qty": 410, "confirmed_qty": 410, "actual_qty": 408, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T07:25:00Z", "confirmed_at": "2026-04-27T07:23:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 3,
+    "fields": {"heat": 1, "material_code": "C", "material_name": "Carbon Raiser", "standard_qty": 150, "calculated_qty": 145, "confirmed_qty": 145, "actual_qty": 142, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T07:30:00Z", "confirmed_at": "2026-04-27T07:28:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 4,
+    "fields": {"heat": 2, "material_code": "FeMn_LC", "material_name": "Low Carbon Ferro Manganese", "standard_qty": 750, "calculated_qty": 730, "confirmed_qty": 730, "actual_qty": 728, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T11:00:00Z", "confirmed_at": "2026-04-27T10:58:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 5,
+    "fields": {"heat": 2, "material_code": "FeSi", "material_name": "Ferro Silicon", "standard_qty": 380, "calculated_qty": 370, "confirmed_qty": 370, "actual_qty": 368, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T11:05:00Z", "confirmed_at": "2026-04-27T11:03:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 6,
+    "fields": {"heat": 2, "material_code": "FeCr_LC", "material_name": "Low Carbon Ferro Chromium", "standard_qty": 120, "calculated_qty": 115, "confirmed_qty": 115, "actual_qty": 112, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T11:15:00Z", "confirmed_at": "2026-04-27T11:12:00Z", "notes": ""}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 7,
+    "fields": {"heat": 3, "material_code": "FeMo", "material_name": "Ferro Molybdenum", "standard_qty": 85, "calculated_qty": 82, "confirmed_qty": 0, "actual_qty": 0, "unit": "kg", "added_to": "ladle", "status": "pending", "timestamp": null, "confirmed_at": null, "notes": "Awaiting confirmation"}
+  },
+  {
+    "model": "lf.lfaddition",
+    "pk": 8,
+    "fields": {"heat": 3, "material_code": "FeCr_HC", "material_name": "High Carbon Ferro Chromium", "standard_qty": 250, "calculated_qty": 245, "confirmed_qty": 245, "actual_qty": 243, "unit": "kg", "added_to": "ladle", "status": "confirmed", "timestamp": "2026-04-27T15:10:00Z", "confirmed_at": "2026-04-27T15:08:00Z", "notes": ""}
+  },
+
+  {
+    "model": "lf.lfdelay",
+    "pk": 1,
+    "fields": {"heat": 1, "category": "electrical", "code": "ELEC_02", "description": "Electrode change", "cause": "Electrode break", "start_time": "2026-04-27T06:40:00Z", "end_time": "2026-04-27T06:48:00Z", "duration": 480, "status": "completed", "created_at": "2026-04-27T06:40:00Z"}
+  },
+  {
+    "model": "lf.lfdelay",
+    "pk": 2,
+    "fields": {"heat": 1, "category": "process", "code": "PROC_02", "description": "Temperature waiting", "cause": "Probe calibration", "start_time": "2026-04-27T08:15:00Z", "end_time": "2026-04-27T08:22:00Z", "duration": 420, "status": "completed", "created_at": "2026-04-27T08:15:00Z"}
+  },
+  {
+    "model": "lf.lfdelay",
+    "pk": 3,
+    "fields": {"heat": 2, "category": "mechanical", "code": "MECH_02", "description": "Ladle turret issue", "cause": "Hydraulic pressure drop", "start_time": "2026-04-27T11:30:00Z", "end_time": "2026-04-27T11:45:00Z", "duration": 900, "status": "completed", "created_at": "2026-04-27T11:30:00Z"}
+  },
+  {
+    "model": "lf.lfdelay",
+    "pk": 4,
+    "fields": {"heat": 2, "category": "process", "code": "PROC_03", "description": "Slag condition issue", "cause": "High slag viscosity", "start_time": "2026-04-27T12:20:00Z", "end_time": "2026-04-27T12:30:00Z", "duration": 600, "status": "completed", "created_at": "2026-04-27T12:20:00Z"}
+  },
+  {
+    "model": "lf.lfdelay",
+    "pk": 5,
+    "fields": {"heat": 3, "category": "maintenance", "code": "MNT_01", "description": "Cooling system check", "cause": "Temperature fluctuation", "start_time": "2026-04-27T14:45:00Z", "end_time": null, "duration": 0, "status": "active", "created_at": "2026-04-27T14:45:00Z"}
+  }
+]

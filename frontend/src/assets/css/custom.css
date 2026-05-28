@@ -1,0 +1,148 @@
+/* Sidebar */
+.sidebar-container {
+  width: 250px;
+  background: #ffffff;
+  border-right: 1px solid #dee2e6;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  padding-top: 1rem;
+}
+
+.sidebar-container .side-item {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #495057;
+  font-weight: 500;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  text-decoration: none;
+}
+
+.sidebar-container .side-item:hover {
+  background-color: #f1f3f5;
+  color: #0d6efd;
+}
+
+.sidebar-container .side-item i {
+  margin-left: 0.5rem;
+}
+
+/* Header */
+.app-header {
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 10;
+}
+
+/* Main Content */
+.main-content main {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 60px);
+}
+
+/* Cards */
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
+}
+/* گردی دکمه‌ها */
+.btn-custom {
+  border-radius: 5px !important;
+}
+
+/* فاصله بین دکمه‌های جدول */
+.d-flex.gap-1 > .btn-custom {
+  margin-right: 5px; /* برای RTL، فاصله سمت راست */
+}
+
+/* فرم‌ها و مودال‌ها راست‌چین */
+.modal,
+.modal-body,
+.form-control {
+  direction: rtl;
+  text-align: right;
+}
+
+/* جدول راست‌چین و متن وسط‌چین */
+.table {
+  direction: rtl;
+  text-align: center;
+}
+
+/* بهبود ظاهر InputGroup */
+.input-group .form-control {
+  text-align: right;
+  direction: rtl;
+}
+
+/* کوچک کردن ارتفاع و padding فرم‌ها */
+.form-control {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+/* فاصله داخلی کارت‌ها */
+.card-body {
+  padding: 15px;
+}
+
+/* کلیت صفحه */
+.factories-page {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Vazir', sans-serif; /* اگر فونت فارسی دارید */
+}
+
+/* دکمه‌ها در جدول */
+.action-btn + .action-btn {
+  margin-right: 0.5rem;
+}
+
+.custom-btn-outline {
+  border-radius: 5px !important;
+  padding: 0.35rem 1rem !important;
+  font-size: 0.85rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-btn-outline:hover {
+  transform: translateY(-1px);
+}
+
+/* مودال RTL */
+.rtl-modal {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ورودی‌های جستجو */
+.rtl-input {
+  text-align: right;
+  direction: rtl;
+}
+
+/* لوکیشن سلکت زیباتر */
+.location-select {
+  border-radius: 5px !important;
+  padding: 0.4rem 1rem !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.location-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 6px rgba(25, 135, 84, 0.4);
+}
+
+/* جدول */
+.table th,
+.table td {
+  vertical-align: middle;
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "model": "eaf.eafenergy",
+    "pk": 1,
+    "fields": {
+      "heat": 2004,
+      "timestamp": "2026-05-09T08:15:00Z",
+      "power_active": 45.5,
+      "power_reactive": 15.2,
+      "energy_consumed": 5.7,
+      "electrode_position": 460,
+      "tap_position": 3,
+      "working_point": 3
+    }
+  },
+  {
+    "model": "eaf.eafenergy",
+    "pk": 2,
+    "fields": {
+      "heat": 2004,
+      "timestamp": "2026-05-09T08:30:00Z",
+      "power_active": 68.2,
+      "power_reactive": 22.8,
+      "energy_consumed": 17.2,
+      "electrode_position": 475,
+      "tap_position": 4,
+      "working_point": 4
+    }
+  },
+  {
+    "model": "eaf.eafenergy",
+    "pk": 3,
+    "fields": {
+      "heat": 2004,
+      "timestamp": "2026-05-09T09:00:00Z",
+      "power_active": 72.5,
+      "power_reactive": 24.1,
+      "energy_consumed": 58.4,
+      "electrode_position": 485,
+      "tap_position": 5,
+      "working_point": 5
+    }
+  }
+]

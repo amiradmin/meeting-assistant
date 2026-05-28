@@ -1,0 +1,13 @@
+{
+  "name": "MITE SmartSteel Systems",
+  "short_name": "SmartSteel",
+  "description": "MITE SmartSteel Systems Dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "orientation": "portrait-primary",
+  "icons": [
+
+  ]
+}

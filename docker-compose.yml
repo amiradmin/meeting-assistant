@@ -1,37 +1,93 @@
 version: '3.8'
 
 services:
-  # ============================================
-  # سرویس پایگاه داده PostgreSQL
-  # ============================================
-  postgres:
+  # PostgreSQL Database
+  db:
     image: postgres:15-alpine
     container_name: meeting_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: meeting_assistant
-      POSTGRES_USER: meeting_user
-      POSTGRES_PASSWORD: meeting_pass_2024
-      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: ${DB_NAME:-steel_db}
+      POSTGRES_USER: ${DB_USER:-steel_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-steel_pass_123}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backups:/backups
+      - ./backup:/backup
     ports:
       - "5432:5432"
-    networks:
-      - meeting_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U meeting_user -d meeting_assistant"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-steel_user} -d ${DB_NAME:-steel_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 256M
+    networks:
+      - meeting_network
+
+  # Backend Django
+  backend:
+    build: ./backend
+    container_name: meeting_backend
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=${DEBUG:-1}
+      - DJANGO_SETTINGS_MODULE=steel_middleeast.settings
+      - DB_NAME=${DB_NAME:-steel_db}
+      - DB_USER=${DB_USER:-steel_user}
+      - DB_PASSWORD=${DB_PASSWORD:-steel_pass_123}
+      - DB_HOST=db
+      - DB_PORT=5432
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ./entrypoint.sh
+    networks:
+      - meeting_network
+
+  # Frontend React
+  frontend:
+    build: ./frontend
+    container_name: meeting_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"  # پورت Vite
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/dist  # جلوگیری از overwrite شدن build
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=http://localhost:8000/api  # توجه: REACT_APP_ به VITE_ تغییر کرد
+      - NODE_ENV=development
+    networks:
+      - meeting_network
+    stdin_open: true  # برای Vite ضروری است
+    tty: true         # برای Vite ضروری است
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: meeting_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/static
+      - media_volume:/media
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - meeting_network
+
+
 
   # ============================================
   # سرویس Redis برای کش و صف
@@ -58,6 +114,8 @@ services:
           memory: 512M
         reservations:
           memory: 128M
+
+
 
   # ============================================
   # سرویس Ollama برای LLM آفلاین
@@ -126,98 +184,6 @@ services:
       "
 
   # ============================================
-  # سرویس تبدیل صدا به متن (Whisper)
-  # ============================================
-  transcriber:
-    build:
-      context: ./transcriber
-      dockerfile: Dockerfile
-    container_name: meeting_transcriber
-    restart: unless-stopped
-    volumes:
-      - ./uploads:/app/uploads
-      - ./transcriber_models:/root/.cache/huggingface
-      - whisper_cache:/root/.cache/whisper
-    ports:
-      - "8001:8001"
-    networks:
-      - meeting_network
-    environment:
-      - MODEL_SIZE=base
-      - DEVICE=cpu
-      - COMPUTE_TYPE=int8
-      - CPU_THREADS=4
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 1G
-
-  # ============================================
-  # سرویس Backend Django
-  # ============================================
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: meeting_backend
-    restart: unless-stopped
-    volumes:
-      - ./backend:/app
-      - ./uploads:/app/uploads
-      - static_volume:/app/staticfiles
-      - media_volume:/app/media
-    ports:
-      - "8000:8000"
-    networks:
-      - meeting_network
-    environment:
-      - DEBUG=1
-      - SECRET_KEY=meeting-secret-key-change-in-production-2024
-      - ALLOWED_HOSTS=localhost,127.0.0.1,backend,nginx
-      - DATABASE_URL=postgresql://meeting_user:meeting_pass_2024@postgres:5432/meeting_assistant
-      - REDIS_URL=redis://redis:6379/0
-      - OLLAMA_URL=http://ollama:11434
-      - TRANSCRIBER_URL=http://transcriber:8001
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/1
-      - DJANGO_SUPERUSER_USERNAME=admin
-      - DJANGO_SUPERUSER_EMAIL=admin@meeting.com
-      - DJANGO_SUPERUSER_PASSWORD=admin123
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      transcriber:
-        condition: service_healthy
-    command: >
-      sh -c "
-        python manage.py wait_for_db &&
-        python manage.py migrate &&
-        python manage.py collectstatic --noinput &&
-        python manage.py create_superuser_if_not_exists &&
-        python manage.py runserver 0.0.0.0:8000
-      "
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  # ============================================
   # سرویس Celery Worker
   # ============================================
   celery:
@@ -240,7 +206,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -266,7 +232,7 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -298,83 +264,18 @@ services:
       timeout: 10s
       retries: 3
 
-  # ============================================
-  # سرویس Frontend React
-  # ============================================
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - REACT_APP_API_URL=http://localhost:8000
-        - REACT_APP_WS_URL=ws://localhost:8000
-    container_name: meeting_frontend
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    networks:
-      - meeting_network
-    environment:
-      - REACT_APP_API_URL=http://localhost:8000
-      - REACT_APP_WS_URL=ws://localhost:8000
-    depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
-  # ============================================
-  # Nginx Proxy (اختیاری)
-  # ============================================
-  nginx:
-    image: nginx:alpine
-    container_name: meeting_nginx
-    restart: unless-stopped
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - static_volume:/static:ro
-      - media_volume:/media:ro
-      - ./frontend/build:/usr/share/nginx/html:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - meeting_network
-    depends_on:
-      - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+  redis_data:
+  ollama_data:
 
-# ============================================
-# شبکه‌ها
-# ============================================
+
+
+
 networks:
   meeting_network:
     driver: bridge
-    name: meeting_network
 
-# ============================================
-# Volumeها
-# ============================================
-volumes:
-  postgres_data:
-    name: meeting_postgres_data
-  redis_data:
-    name: meeting_redis_data
-  ollama_data:
-    name: meeting_ollama_data
-  whisper_cache:
-    name: meeting_whisper_cache
-  transcriber_models:
-    name: meeting_transcriber_models
-  static_volume:
-    name: meeting_static_volume
-  media_volume:
-    name: meeting_media_volume

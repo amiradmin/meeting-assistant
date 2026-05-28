@@ -1,0 +1,684 @@
+/* src/components/dashboard/RealTimeMetrics.css */
+
+/* Card Header */
+.card-header {
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 12px 12px 0 0;
+}
+
+.card-title {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.card-title i {
+  color: #4fc3f7;
+  font-size: 1.3rem;
+}
+
+.update-time {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.update-time i {
+  color: #4fc3f7;
+  font-size: 0.9rem;
+}
+
+.card-body {
+  padding: 25px;
+}
+
+/* Section Titles */
+.section-title {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title i {
+  color: #4fc3f7;
+  font-size: 1rem;
+}
+
+/* Gauges Section */
+.gauges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.gauge-card {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.gauge-card:hover {
+  border-color: rgba(79, 195, 247, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.gauge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.gauge-title {
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gauge-title i {
+  font-size: 1.1rem;
+}
+
+.gauge-unit {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  background: rgba(148, 163, 184, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.gauge-container {
+  position: relative;
+  height: 120px;
+  margin: 20px 0;
+}
+
+.gauge-background {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gauge-track {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(245, 158, 11, 0.1) 50%,
+    rgba(239, 68, 68, 0.1) 100%
+  );
+}
+
+.gauge-progress {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.gauge-ticks {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gauge-ticks .tick {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  position: relative;
+  top: 5px;
+}
+
+.gauge-indicator {
+  position: absolute;
+  top: -15px;
+  transform: translateX(-50%);
+  transition: left 1s ease;
+  z-index: 10;
+}
+
+.indicator-line {
+  width: 2px;
+  height: 30px;
+  background: #fff;
+  margin: 0 auto 5px;
+  box-shadow: 0 0 10px #fff;
+}
+
+.indicator-value {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 60px;
+  text-align: center;
+}
+
+.gauge-thresholds {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  width: 100%;
+  height: 40px;
+}
+
+.threshold {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.threshold-marker {
+  width: 2px;
+  height: 15px;
+  background: currentColor;
+  margin: 0 auto;
+}
+
+.threshold-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  margin-top: 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.threshold.warning {
+  color: #f59e0b;
+}
+
+.threshold.danger {
+  color: #ef4444;
+}
+
+.gauge-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gauge-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.gauge-range {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* Numeric Metrics Section */
+.numeric-section {
+  margin-bottom: 30px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.metric-item {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+  border-color: rgba(79, 195, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.metric-item.optimal {
+  border-left: 4px solid #10b981;
+}
+
+.metric-item.good {
+  border-left: 4px solid #3b82f6;
+}
+
+.metric-item.normal {
+  border-left: 4px solid #94a3b8;
+}
+
+.metric-item.warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.metric-item.danger {
+  border-left: 4px solid #ef4444;
+  animation: alertPulse 1s infinite alternate;
+}
+
+@keyframes alertPulse {
+  from {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3);
+  }
+  to {
+    box-shadow: 0 0 0 5px rgba(239, 68, 68, 0);
+  }
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.metric-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background: rgba(79, 195, 247, 0.1);
+  color: #4fc3f7;
+}
+
+.metric-info {
+  flex: 1;
+  margin: 0 15px;
+}
+
+.metric-title {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.metric-unit {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.metric-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.trend-value {
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin: 15px 0;
+  font-family: 'Vazirmatn', monospace;
+  direction: ltr;
+}
+
+.metric-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.metric-target {
+  color: #94a3b8;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.metric-target i {
+  color: #4fc3f7;
+  font-size: 0.8rem;
+}
+
+.metric-status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-optimal {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-good {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status-normal {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.status-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Performance Section */
+.performance-section {
+  margin-top: 30px;
+}
+
+.performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.performance-card {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.performance-card:hover {
+  border-color: rgba(79, 195, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.performance-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.performance-icon {
+  font-size: 1.5rem;
+  color: #4fc3f7;
+  background: rgba(79, 195, 247, 0.1);
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.performance-title {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.performance-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin: 15px 0;
+  font-family: 'Vazirmatn', monospace;
+}
+
+.performance-progress {
+  margin-top: 20px;
+}
+
+.progress {
+  height: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .gauges-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .performance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .gauges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gauge-container {
+    height: 100px;
+  }
+
+  .indicator-value {
+    font-size: 1rem;
+    min-width: 50px;
+  }
+
+  .metric-value {
+    font-size: 1.8rem;
+  }
+
+  .performance-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .gauge-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .metric-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* Animation for real-time updates */
+@keyframes flashUpdate {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(79, 195, 247, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.updating {
+  animation: flashUpdate 1s ease;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: light) {
+  .gauge-card,
+  .metric-item,
+  .performance-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .gauge-title,
+  .metric-title,
+  .performance-title {
+    color: #1e293b;
+  }
+
+  .metric-value,
+  .performance-value {
+    color: #0f172a;
+  }
+
+  .gauge-background {
+    background: rgba(226, 232, 240, 0.8);
+  }
+
+  .progress {
+    background: rgba(226, 232, 240, 0.8);
+  }
+}
+
+/* Print styles */
+@media print {
+  .gauge-card,
+  .metric-item,
+  .performance-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+
+  .gauge-progress,
+  .progress-bar {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "model": "eaf.eafcharging",
+    "pk": 1,
+    "fields": {
+      "heat": 2001,
+      "charging_type": "bucket",
+      "material": "Heavy Scrap",
+      "weight": 50.5,
+      "charging_time": "2026-05-01T08:35:00Z",
+      "operator_name": "John Smith"
+    }
+  },
+  {
+    "model": "eaf.eafcharging",
+    "pk": 2,
+    "fields": {
+      "heat": 2001,
+      "charging_type": "bucket",
+      "material": "Light Scrap",
+      "weight": 35.0,
+      "charging_time": "2026-05-01T08:50:00Z",
+      "operator_name": "John Smith"
+    }
+  },
+  {
+    "model": "eaf.eafcharging",
+    "pk": 3,
+    "fields": {
+      "heat": 2001,
+      "charging_type": "continuous",
+      "material": "DRI",
+      "weight": 35.0,
+      "charging_time": "2026-05-01T09:15:00Z",
+      "operator_name": "System"
+    }
+  },
+  {
+    "model": "eaf.eafcharging",
+    "pk": 4,
+    "fields": {
+      "heat": 2004,
+      "charging_type": "bucket",
+      "material": "Scrap Mix",
+      "weight": 84.0,
+      "charging_time": "2026-05-04T08:10:00Z",
+      "operator_name": "Mike Johnson"
+    }
+  },
+  {
+    "model": "eaf.eafcharging",
+    "pk": 5,
+    "fields": {
+      "heat": 2004,
+      "charging_type": "continuous",
+      "material": "DRI",
+      "weight": 36.0,
+      "charging_time": "2026-05-04T08:30:00Z",
+      "operator_name": "System"
+    }
+  }
+]

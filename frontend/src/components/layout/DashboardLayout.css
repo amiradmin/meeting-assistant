@@ -1,0 +1,100 @@
+/* Smooth transitions */
+.bmd-layout-container {
+  transition: all 0.3s ease-in-out;
+}
+
+.bmd-layout-drawer {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Drawer widths */
+.drawer-open {
+  transform: translateX(0) !important;
+}
+
+.drawer-closed {
+  transform: translateX(-260px) !important;
+}
+
+/* Main content spacing */
+.main-content-area {
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+/* Desktop: drawer open shifts main content */
+@media (min-width: 992px) {
+  .drawer-open ~ .bmd-layout-content {
+    margin-left: 260px !important;
+  }
+
+  .drawer-closed ~ .bmd-layout-content {
+    margin-left: 0 !important;
+  }
+}
+
+/* Mobile mode */
+@media (max-width: 991px) {
+  /* Sidebar becomes overlay */
+  .bmd-layout-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    z-index: 2000 !important;
+    background: #fff;
+    box-shadow: 0 0 10px #0003;
+  }
+
+  /* Dark backdrop when open */
+  .drawer-open::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1500;
+  }
+
+  /* Main content takes full width */
+  .main-content-area {
+    margin-left: 0 !important;
+  }
+}
+
+/* برای نمایش دکمه همبرگر فقط در موبایل */
+@media (max-width: 768px) {
+  .drawer-toggle-btn {
+    display: flex !important;
+  }
+
+  /* تنظیم موقعیت drawer در موبایل */
+  .bmd-drawer-f-l .bmd-layout-drawer {
+    transform: translateX(-280px);
+    transition: transform 0.3s ease;
+  }
+
+  .bmd-drawer-f-l.bmd-drawer-in .bmd-layout-drawer {
+    transform: translateX(0);
+  }
+
+  .bmd-layout-content {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+/* در دسکتاپ drawer همیشه باز باشد */
+@media (min-width: 769px) {
+  .bmd-drawer-f-l .bmd-layout-drawer {
+    transform: translateX(0) !important;
+  }
+
+  .bmd-layout-content {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+  }
+}
