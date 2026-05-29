@@ -16,52 +16,43 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 from django.http import JsonResponse
 
 
-# یک view ساده برای سلامت سرویس
 def health_check(request):
-    return JsonResponse({
-        'status': 'ok',
-        'service': 'backend',
-        'version': '1.0.0'
-    })
+    return JsonResponse({'status': 'ok', 'service': 'backend'})
 
 
 def api_root(request):
     return JsonResponse({
-        'message': 'Welcome to Meeting Assistant API',
+        'message': 'Meeting Assistant API',
         'endpoints': {
-            'admin': '/admin/',
+            'auth': {
+                'token': '/api/token/',
+                'refresh': '/api/token/refresh/',
+                'verify': '/api/token/verify/',
+            },
             'api': '/api/',
-            'api/meetings': '/api/meetings/',
-            'health': '/health/',
-        },
-        'version': '1.0.0'
+            'admin': '/admin/',
+        }
     })
 
 
 urlpatterns = [
-    # Admin panel
     path('admin/', admin.site.urls),
+    path('', api_root),
+    path('health/', health_check),
 
-    # API root
-    path('', api_root, name='api-root'),
-
-    # Health check
-    path('health/', health_check, name='health'),
+    # JWT Authentication endpoints
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # Meetings app APIs
     path('api/', include('meetings.urls')),
-
-    # برای دسترسی به فایل‌های مدیا
-    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-    *static('/uploads/',
-            document_root=settings.UPLOAD_ROOT if hasattr(settings, 'UPLOAD_ROOT') else settings.MEDIA_ROOT),
 ]
-
-# در حالت توسعه، دسترسی به فایل‌های استاتیک را هم اضافه کن
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -8,4 +8,5 @@ router.register(r'meetings', views.MeetingViewSet, basename='meeting')
 urlpatterns = [
     path('', include(router.urls)),
     path('health/', views.health_check, name='health'),
+    path('user/', views.UserInfoView.as_view(), name='user-info'),  # اضافه کن
 ]
