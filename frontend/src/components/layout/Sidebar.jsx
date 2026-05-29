@@ -12,7 +12,8 @@ const Sidebar = () => {
     quality: false,
     reports: false,
     settings: false,
-    plc: false
+    plc: false,
+    meetings: false  // اضافه کردن منوی جلسات
   });
 
   const toggleMenu = (menu) => {
@@ -37,13 +38,13 @@ const Sidebar = () => {
       <header className="pb-0">
         <Link className="navbar-brand" to="/">
           <img
-  style={{
-    maxWidth: "210px",
-    height: "auto"
-  }}
-  src="/images/mianeh_logo (1).png"
-  alt="MITE Logo"
-/>
+            style={{
+              maxWidth: "210px",
+              height: "auto"
+            }}
+            src="/images/mianeh_logo (1).png"
+            alt="MITE Logo"
+          />
         </Link>
       </header>
 
@@ -53,6 +54,34 @@ const Sidebar = () => {
           <i className="fas fa-tachometer-alt mr-1"></i>Dashboard
         </Link>
       </li>
+
+      {/* ==================== MEETING ASSISTANT ==================== */}
+      <ul className="side a-collapse short">
+        <div
+          className={`ul-text fnt-mxs ${openMenus.meetings ? 'open' : ''}`}
+          title="Meeting Assistant - دستیار جلسات"
+          onClick={() => toggleMenu('meetings')}
+          style={{ cursor: 'pointer' }}
+        >
+          <i className="fas fa-microphone-alt mr-1"></i>
+          دستیار جلسات
+          <i className={`fas fa-chevron-${openMenus.meetings ? 'down' : 'right'} arrow`}></i>
+        </div>
+        <div className={`side-item-container ${openMenus.meetings || isMenuActive(['/meetings', '/meeting']) ? 'show' : 'hide'} animated`}>
+          <li className="side-item">
+            <Link to="/meetings/recorder" className={`side-link ${isActive('/meetings/recorder') ? 'active' : ''}`}>
+              <i className="fas fa-microphone mr-1"></i>
+              ضبط جلسه جدید
+            </Link>
+          </li>
+          <li className="side-item">
+            <Link to="/meetings/list" className={`side-link ${isActive('/meetings/list') ? 'active' : ''}`}>
+              <i className="fas fa-list mr-1"></i>
+              لیست جلسات
+            </Link>
+          </li>
+        </div>
+      </ul>
 
       {/* ==================== PLC COMMUNICATION ==================== */}
       <ul className="side a-collapse short">
@@ -136,6 +165,12 @@ const Sidebar = () => {
             <Link to="/production/buckets" className={`side-link ${isActive('/production/buckets') ? 'active' : ''}`}>
               <i className="fas fa-layer-group mr-1"></i>
               Buckets
+            </Link>
+          </li>
+          <li className="side-item">
+            <Link to="/production/heats" className={`side-link ${isActive('/production/heats') ? 'active' : ''}`}>
+              <i className="fas fa-fire mr-1"></i>
+              Heats
             </Link>
           </li>
         </div>
@@ -349,7 +384,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="side-item">
-            <Link to="/settings/profile" className={`side-link ${isActive('/settings/profile') ? 'active' : ''}`}>
+            <Link to="/profile" className={`side-link ${isActive('/profile') ? 'active' : ''}`}>
               <i className="fas fa-user mr-1"></i>
               User Profile
             </Link>

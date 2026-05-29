@@ -27,6 +27,11 @@ import PLCAlarms from './components/PLC/PLCAlarms';
 import PLCHistoricalData from './components/PLC/PLCHistoricalData';
 import PLCConfiguration from './components/PLC/PLCConfiguration';
 
+// Import Meeting components
+import MeetingRecorder from './pages/MeetingRecorder';
+import MeetingDetails from './pages/MeetingDetails';
+import MeetingsList from './pages/MeetingsList';
+
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
@@ -50,6 +55,13 @@ function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="locations" element={<Locations />} />
                     <Route path="profile" element={<Profile />} />
+
+                    {/* ==================== MEETING ASSISTANT ROUTES ==================== */}
+                    {/* Meeting Routes */}
+                    <Route path="meetings" element={<MeetingRecorder />} />
+                    <Route path="meetings/recorder" element={<MeetingRecorder />} />
+                    <Route path="meetings/list" element={<MeetingsList />} />
+                    <Route path="meeting/:id" element={<MeetingDetails />} />
 
                     {/* ==================== PLC COMMUNICATION ROUTES ==================== */}
                     {/* Main PLC Routes */}

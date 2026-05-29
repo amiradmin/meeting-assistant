@@ -9,11 +9,13 @@ from django.db.models import Q
 from rest_framework.views import APIView
 import os
 import uuid
+import logging
 
 from .models import Meeting
 from .serializers import MeetingSerializer, MeetingCreateSerializer, MeetingStatusSerializer
 from .tasks import process_meeting_audio
 
+logger = logging.getLogger(__name__)
 
 class MeetingViewSet(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
@@ -41,8 +43,15 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
         meeting = serializer.save()
 
-        # اجرای تسک پس‌زمینه برای پردازش
-        process_meeting_audio.delay(meeting.id)
+        # اجرای تسک پس‌زمینه برای پردازش با error handling
+        try:
+            process_meeting_audio.delay(meeting.id)
+            logger.info(f"Task started for meeting {meeting.id}")
+        except Exception as e:
+            logger.error(f"Failed to start task for meeting {meeting.id}: {str(e)}")
+            # اگر celery در دسترس نبود، meeting را با status pending نگه دار
+            meeting.status = 'pending'
+            meeting.save()
 
         return Response(
             MeetingSerializer(meeting).data,
@@ -61,7 +70,11 @@ class MeetingViewSet(viewsets.ModelViewSet):
         if meeting.status in ['failed', 'pending']:
             meeting.status = 'pending'
             meeting.save()
-            process_meeting_audio.delay(meeting.id)
+            try:
+                process_meeting_audio.delay(meeting.id)
+            except Exception as e:
+                logger.error(f"Failed to retry task: {str(e)}")
+                return Response({'error': 'خطا در شروع پردازش مجدد'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response({'message': 'پردازش مجدد شروع شد'}, status=status.HTTP_200_OK)
         return Response(
             {'error': 'فقط جلسات خطا خورده یا در انتظار را می‌توان مجدداً پردازش کرد'},
