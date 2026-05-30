@@ -1,66 +1,166 @@
+/* ============================================
+   MEETING RECORDER - PROFESSIONAL STYLES
+   با پشتیبانی از Dark/Light Mode و RTL
+   ============================================ */
+
+/* ============================================
+   VARIABLES - LIGHT MODE (پیش‌فرض)
+   ============================================ */
 .recorder-container {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-  font-family: 'IRANSans', 'Tahoma', sans-serif;
+  background: var(--bg-primary);
+  padding: 24px;
+  font-family: 'IRANSans', 'Tahoma', 'Vazir', sans-serif;
 }
 
+/* ============================================
+   DARK MODE
+   ============================================ */
+.dark-theme .recorder-container {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: #1e293b;
+  --bg-hover: #334155;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-light: #64748b;
+
+  --border-color: #334155;
+  --border-light: #1e293b;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+
+  --gradient-primary: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  --gradient-success: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  --gradient-danger: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+  --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
 .recorder-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 16px;
 }
 
 .btn-back {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   padding: 10px 20px;
-  border-radius: 10px;
-  color: white;
+  border-radius: 12px;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-back:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-5px);
+  background: var(--bg-hover);
+  transform: translateX(-4px);
+  color: var(--text-primary);
+}
+
+[dir="rtl"] .btn-back:hover {
+  transform: translateX(4px);
 }
 
 .recorder-title {
-  color: white;
   font-size: 28px;
+  font-weight: 700;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 12px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+/* ============================================
+   MESSAGE NOTIFICATION
+   ============================================ */
 .recorder-message {
-  background: white;
-  padding: 15px 20px;
+  background: var(--bg-card);
+  padding: 16px 20px;
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
+  box-shadow: var(--shadow-md);
   animation: slideDown 0.3s ease;
+  border-right: 4px solid;
 }
 
 .recorder-message.success {
-  border-right: 4px solid #10b981;
-  color: #10b981;
+  border-right-color: var(--color-success);
+  color: var(--color-success);
 }
 
 .recorder-message.error {
-  border-right: 4px solid #ef4444;
-  color: #ef4444;
+  border-right-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+[dir="rtl"] .recorder-message {
+  border-right: none;
+  border-left: 4px solid;
+}
+
+[dir="rtl"] .recorder-message.success {
+  border-left-color: var(--color-success);
+}
+
+[dir="rtl"] .recorder-message.error {
+  border-left-color: var(--color-danger);
 }
 
 @keyframes slideDown {
@@ -74,8 +174,11 @@
   }
 }
 
+/* ============================================
+   CONTENT SECTIONS
+   ============================================ */
 .recorder-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -83,26 +186,37 @@
 .upload-section,
 .audio-preview,
 .recent-meetings {
-  background: white;
+  background: var(--bg-card);
   border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.recording-section:hover,
+.upload-section:hover,
+.audio-preview:hover,
+.recent-meetings:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
 }
 
 .section-title {
   font-size: 20px;
   font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
 }
 
+/* ============================================
+   RECORDING CONTROLS
+   ============================================ */
 .recording-controls {
   display: flex;
   justify-content: center;
@@ -110,117 +224,131 @@
 }
 
 .btn-record {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: var(--gradient-danger);
   color: white;
   border: none;
-  padding: 15px 40px;
+  padding: 14px 40px;
   border-radius: 50px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
 
-.btn-record:hover {
+.btn-record:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
 }
 
 .btn-stop {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
-  color: white;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   border: none;
-  padding: 15px 40px;
+  padding: 14px 40px;
   border-radius: 50px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-stop:hover {
+  background: var(--bg-hover);
   transform: scale(1.05);
 }
 
 .recording-indicator {
   text-align: center;
-  margin-top: 25px;
-  padding: 20px;
-  background: #fef2f2;
-  border-radius: 12px;
+  margin-top: 28px;
+  padding: 24px;
+  background: var(--bg-tertiary);
+  border-radius: 16px;
 }
 
 .recording-wave {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
-  height: 40px;
-  margin-bottom: 15px;
+  gap: 6px;
+  height: 50px;
+  margin-bottom: 20px;
 }
 
 .recording-wave span {
   width: 4px;
-  height: 20px;
-  background: #ef4444;
+  background: var(--color-danger);
   border-radius: 2px;
   animation: wave 1s ease-in-out infinite;
 }
 
-.recording-wave span:nth-child(2) { animation-delay: 0.1s; height: 30px; }
-.recording-wave span:nth-child(3) { animation-delay: 0.2s; height: 40px; }
-.recording-wave span:nth-child(4) { animation-delay: 0.3s; height: 30px; }
-.recording-wave span:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+.recording-wave span:nth-child(1) { height: 20px; animation-delay: 0s; }
+.recording-wave span:nth-child(2) { height: 35px; animation-delay: 0.1s; }
+.recording-wave span:nth-child(3) { height: 50px; animation-delay: 0.2s; }
+.recording-wave span:nth-child(4) { height: 35px; animation-delay: 0.3s; }
+.recording-wave span:nth-child(5) { height: 20px; animation-delay: 0.4s; }
 
 @keyframes wave {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(2); }
+  0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(1.5); opacity: 1; }
 }
 
 .recording-time {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ef4444;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-danger);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
+/* ============================================
+   UPLOAD AREA
+   ============================================ */
 .upload-area {
   display: block;
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--border-color);
   border-radius: 16px;
-  padding: 40px;
+  padding: 48px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  background: var(--bg-secondary);
 }
 
 .upload-area:hover {
-  border-color: #667eea;
-  background: #f8fafc;
-}
-
-.upload-content {
-  color: #64748b;
+  border-color: var(--color-info);
+  background: var(--bg-hover);
+  transform: translateY(-2px);
 }
 
 .upload-content svg {
-  font-size: 48px;
-  color: #667eea;
-  margin-bottom: 15px;
+  font-size: 56px;
+  color: var(--color-info);
+  margin-bottom: 16px;
 }
 
 .upload-content p {
-  margin: 10px 0;
+  margin: 12px 0 8px;
   font-size: 16px;
+  color: var(--text-secondary);
 }
 
+.upload-content small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ============================================
+   AUDIO PREVIEW
+   ============================================ */
 .audio-preview {
   animation: slideUp 0.4s ease;
 }
@@ -239,67 +367,69 @@
 .audio-player {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 15px;
-  background: #f8fafc;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 16px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
 .play-btn {
-  background: #667eea;
+  background: var(--gradient-primary);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
 
 .play-btn:hover {
-  background: #5a67d8;
   transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
 }
 
 .audio-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .audio-name {
-  font-weight: 500;
-  color: #333;
+  font-weight: 600;
+  color: var(--text-primary);
   font-size: 14px;
 }
 
 .audio-size {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .clear-btn {
-  background: #ef4444;
-  border: none;
-  width: 40px;
-  height: 40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  color: white;
+  color: var(--color-danger);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
 }
 
 .clear-btn:hover:not(:disabled) {
-  background: #dc2626;
+  background: var(--color-danger);
+  color: white;
   transform: scale(1.05);
 }
 
@@ -308,36 +438,41 @@
   cursor: not-allowed;
 }
 
+/* ============================================
+   MEETING INFO FORM
+   ============================================ */
 .meeting-info-form {
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .meeting-title-input,
 .meeting-desc-input {
   width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #e2e8f0;
-  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
   font-size: 14px;
-  margin-bottom: 15px;
-  transition: all 0.3s ease;
+  margin-bottom: 16px;
+  transition: all var(--transition-fast);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-family: inherit;
 }
 
 .meeting-title-input:focus,
 .meeting-desc-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .btn-submit {
   width: 100%;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: var(--gradient-success);
   color: white;
   border: none;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -345,12 +480,12 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn-submit:disabled {
@@ -358,39 +493,43 @@
   cursor: not-allowed;
 }
 
-.recent-meetings {
-  background: white;
-  border-radius: 20px;
-  padding: 25px;
-}
-
+/* ============================================
+   RECENT MEETINGS
+   ============================================ */
 .meetings-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .meeting-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  background: #f8fafc;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--border-color);
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 16px;
 }
 
 .meeting-item:hover {
-  background: #f1f5f9;
-  transform: translateX(5px);
+  transform: translateX(-4px);
+  border-color: var(--color-info);
+  box-shadow: var(--shadow-md);
+}
+
+[dir="rtl"] .meeting-item:hover {
+  transform: translateX(4px);
 }
 
 .meeting-info h4 {
-  margin: 0 0 8px 0;
-  color: #333;
+  margin: 0 0 10px 0;
+  color: var(--text-primary);
   font-size: 16px;
+  font-weight: 600;
 }
 
 .meeting-meta {
@@ -427,30 +566,54 @@
   color: #dc2626;
 }
 
+.dark-theme .status-badge.pending {
+  background: #78350f;
+  color: #fbbf24;
+}
+
+.dark-theme .status-badge.processing {
+  background: #1e3a5f;
+  color: #60a5fa;
+}
+
+.dark-theme .status-badge.completed {
+  background: #064e3b;
+  color: #34d399;
+}
+
+.dark-theme .status-badge.failed {
+  background: #7f1d1d;
+  color: #f87171;
+}
+
 .meeting-date {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .btn-view {
-  background: #667eea;
+  background: var(--gradient-primary);
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 13px;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  transition: all var(--transition-fast);
 }
 
 .btn-view:hover {
-  background: #5a67d8;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
+/* ============================================
+   PROCESSING MODAL
+   ============================================ */
 .processing-overlay {
   position: fixed;
   top: 0;
@@ -462,20 +625,31 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
 .processing-modal {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
+  background: var(--bg-card);
+  padding: 48px;
+  border-radius: 24px;
   text-align: center;
   animation: pulse 0.5s ease;
+  box-shadow: var(--shadow-xl);
 }
 
 .processing-modal h3 {
-  margin: 20px 0 10px;
-  color: #333;
+  margin: 24px 0 12px;
+  color: var(--text-primary);
+}
+
+.processing-modal p {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.processing-modal small {
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
 .spin {
@@ -483,8 +657,8 @@
 }
 
 .spin.large {
-  font-size: 48px;
-  color: #667eea;
+  font-size: 56px;
+  color: var(--color-info);
 }
 
 @keyframes spin {
@@ -497,19 +671,46 @@
   50% { transform: scale(1); opacity: 1; }
 }
 
-/* Responsive */
+/* ============================================
+   UTILITIES
+   ============================================ */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
+  .recorder-container {
+    padding: 16px;
+  }
+
   .recorder-header {
     flex-direction: column;
-    text-align: center;
   }
 
   .recorder-title {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .recording-section,
+  .upload-section,
+  .audio-preview,
+  .recent-meetings {
+    padding: 20px;
   }
 
   .recording-controls {
     flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-record,
+  .btn-stop {
+    width: 100%;
+    justify-content: center;
   }
 
   .meeting-item {
@@ -520,13 +721,78 @@
   .meeting-meta {
     justify-content: center;
   }
+
+  .audio-player {
+    flex-direction: column;
+  }
+
+  .play-btn {
+    width: 48px;
+    height: 48px;
+  }
 }
 
-/* RTL Support */
-[dir="rtl"] .btn-back svg {
-  transform: rotate(180deg);
+/* ============================================
+   RTL SPECIFIC
+   ============================================ */
+[dir="rtl"] .meeting-item {
+  text-align: right;
 }
 
-[dir="rtl"] .meeting-item:hover {
-  transform: translateX(-5px);
+[dir="rtl"] .meeting-meta {
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .recording-time {
+  direction: ltr;
+}
+
+@media (max-width: 768px) {
+  [dir="rtl"] .meeting-meta {
+    justify-content: center;
+  }
+
+  [dir="rtl"] .btn-back svg {
+    transform: rotate(180deg);
+  }
+}
+
+
+/* Microphone Warning */
+.mic-warning {
+  background: #fef3c7;
+  border-right: 4px solid #f59e0b;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dark-theme .mic-warning {
+  background: #78350f;
+  border-right-color: #fbbf24;
+}
+
+.mic-warning svg {
+  font-size: 28px;
+  color: #f59e0b;
+}
+
+.mic-warning strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.mic-warning p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+[dir="rtl"] .mic-warning {
+  border-right: none;
+  border-left: 4px solid #f59e0b;
 }

@@ -1,39 +1,61 @@
-# transcriber/Dockerfile
-FROM ubuntu:22.04
+FROM python:3.10-slim
 
 WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3.11 \
-    python3-pip \
-    gcc \
-    g++ \
     ffmpeg \
     curl \
     libsndfile1 \
+    wget \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Create symbolic link for python3
-RUN ln -s /usr/bin/python3.11 /usr/bin/python
+# آپدیت pip
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# ایجاد پوشه برای دانلود
+RUN mkdir -p /tmp/packages
 
-# Install Python dependencies (using default PyPI)
-RUN pip install --no-cache-dir --timeout 600 -r requirements.txt
+# دانلود torch با wget (قابلیت resume دارد)
+RUN wget -c -P /tmp/packages \
+    https://files.pythonhosted.org/packages/ce/65/7c7e3ad48467ba8a70f5f41fc83a65e66b2fade089a7ce6e93d7ec3975ba/torch-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl || \
+    wget -c -P /tmp/packages \
+    https://mirrors.aliyun.com/pypi/packages/ce/65/7c7e3ad48467ba8a70f5f41fc83a65e66b2fade089a7ce6e93d7ec3975ba/torch-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl
 
-# Copy the rest of the application
-COPY . .
+# دانلود torchaudio
+RUN wget -c -P /tmp/packages \
+    https://files.pythonhosted.org/packages/68/c4/3a44a5bceb18c8820e873ebdcdb8933a9f3bb660479b1552fa860673c5b5/torchaudio-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl || \
+    wget -c -P /tmp/packages \
+    https://mirrors.aliyun.com/pypi/packages/68/c4/3a44a5bceb18c8820e873ebdcdb8933a9f3bb660479b1552fa860673c5b5/torchaudio-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl
 
-# Create uploads directory
+# نصب از فایل‌های محلی
+RUN pip install --no-cache-dir \
+    /tmp/packages/torch-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl \
+    /tmp/packages/torchaudio-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl
+
+# نصب بقیه پکیج‌ها
+RUN pip install --no-cache-dir \
+    --retries=10 \
+    --timeout=600 \
+    fastapi \
+    uvicorn[standard] \
+    redis \
+    python-multipart \
+    numpy \
+    tqdm \
+    more-itertools \
+    transformers \
+    openai-whisper
+
+# Copy application
+COPY main.py .
+
 RUN mkdir -p /app/uploads
 
 EXPOSE 8001
 
-# Health check endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8001/health || exit 1
 
-CMD ["python3", "main.py"]
+CMD ["python", "main.py"]

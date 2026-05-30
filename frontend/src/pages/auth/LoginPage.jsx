@@ -152,18 +152,17 @@ const LoginPage = () => {
                     <div className="logo-area">
                         <div className="logo-icon">
                             <div className="meeting-logo">
-                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#667eea" strokeWidth="1.5" strokeLinejoin="round" fill="rgba(102,126,234,0.2)"/>
-                                    <path d="M2 17L12 22L22 17" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                                    <path d="M2 12L12 17L22 12" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                                    <path d="M8 8L16 8" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round"/>
-                                    <path d="M8 12L13 12" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round"/>
-                                    <circle cx="12" cy="12" r="2" fill="#667eea"/>
-                                    <path d="M19 4L21 6L19 8" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
+                                          <img
+            style={{
+              maxWidth: "210px",
+              height: "auto"
+            }}
+            src="/images/logo_111.png"
+            alt="MITE Logo"
+          />
                             </div>
                         </div>
-                        <h1 className="app-title">دستیار جلسات</h1>
+                      
                         <div className="subtitle">سیستم هوشمند تبدیل صدا به صورت جلسه</div>
                     </div>
 

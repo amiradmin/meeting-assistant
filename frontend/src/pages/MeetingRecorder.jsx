@@ -14,10 +14,10 @@ import {
   FaPlay,
   FaPause,
   FaSave,
-  FaTimes,
   FaClock,
   FaFileAlt,
-  FaRobot
+  FaRobot,
+  FaInfoCircle
 } from 'react-icons/fa';
 import './MeetingRecorder.css';
 
@@ -39,6 +39,8 @@ const MeetingRecorder = () => {
   const [meetingDescription, setMeetingDescription] = useState('');
   const [recentMeetings, setRecentMeetings] = useState([]);
   const [processingId, setProcessingId] = useState(null);
+  const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
+  const [audioDevices, setAudioDevices] = useState([]);
 
   // Refs
   const mediaRecorderRef = useRef(null);
@@ -49,7 +51,7 @@ const MeetingRecorder = () => {
   // Axios instance with auth
   const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 300000, // 5 minutes timeout for upload
+    timeout: 300000,
   });
 
   axiosInstance.interceptors.request.use(
@@ -63,6 +65,33 @@ const MeetingRecorder = () => {
     (error) => Promise.reject(error)
   );
 
+  // Check available audio devices
+  const checkAudioDevices = async () => {
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        setMicrophoneAvailable(false);
+        return;
+      }
+
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const audioInputs = devices.filter(device => device.kind === 'audioinput');
+      setAudioDevices(audioInputs);
+
+      if (audioInputs.length === 0) {
+        setMicrophoneAvailable(false);
+        setMessage({
+          type: 'warning',
+          text: 'هیچ میکروفونی در سیستم یافت نشد. لطفاً از گزینه آپلود فایل استفاده کنید.'
+        });
+      } else {
+        setMicrophoneAvailable(true);
+      }
+    } catch (error) {
+      console.error('Error checking audio devices:', error);
+      setMicrophoneAvailable(false);
+    }
+  };
+
   // Fetch recent meetings
   const fetchRecentMeetings = async () => {
     try {
@@ -75,8 +104,18 @@ const MeetingRecorder = () => {
 
   useEffect(() => {
     fetchRecentMeetings();
+    checkAudioDevices();
 
-    // Check for processing status periodically
+    // Listen for device changes
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices.addEventListener('devicechange', checkAudioDevices);
+      return () => {
+        navigator.mediaDevices.removeEventListener('devicechange', checkAudioDevices);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
     if (processingId) {
       const interval = setInterval(checkProcessingStatus, 3000);
       return () => clearInterval(interval);
@@ -105,8 +144,23 @@ const MeetingRecorder = () => {
 
   // Start recording
   const startRecording = async () => {
+    if (!microphoneAvailable) {
+      setMessage({
+        type: 'error',
+        text: 'میکروفونی در دسترس نیست. لطفاً از گزینه آپلود فایل استفاده کنید.'
+      });
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
@@ -121,8 +175,6 @@ const MeetingRecorder = () => {
         const url = URL.createObjectURL(blob);
         setAudioBlob(blob);
         setAudioUrl(url);
-
-        // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -134,9 +186,23 @@ const MeetingRecorder = () => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
 
+      setMessage({ type: 'success', text: 'ضبط شروع شد...' });
+      setTimeout(() => setMessage({ type: '', text: '' }), 2000);
+
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      setMessage({ type: 'error', text: 'دسترسی به میکروفون امکان پذیر نیست' });
+
+      let errorMessage = 'دسترسی به میکروفون امکان پذیر نیست.';
+      if (error.name === 'NotFoundError') {
+        errorMessage = 'میکروفونی یافت نشد. لطفاً میکروفون خود را وصل کنید.';
+        setMicrophoneAvailable(false);
+      } else if (error.name === 'NotAllowedError') {
+        errorMessage = 'دسترسی به میکروفون مجاز نیست. لطفاً مجوز را در مرورگر فعال کنید.';
+      } else if (error.name === 'NotReadableError') {
+        errorMessage = 'میکروفون در حال استفاده توسط برنامه دیگری است.';
+      }
+
+      setMessage({ type: 'error', text: errorMessage });
     }
   };
 
@@ -178,19 +244,29 @@ const MeetingRecorder = () => {
     setAudioBlob(null);
     setAudioUrl(null);
     setIsPlaying(false);
+    setMeetingTitle('');
+    setMeetingDescription('');
   };
 
   // Handle file upload
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    if (file && (file.type.startsWith('audio/') || file.name.match(/\.(mp3|wav|m4a|ogg)$/i))) {
+    const validTypes = ['audio/mpeg', 'audio/wav', 'audio/mp4', 'audio/ogg', 'audio/mp3'];
+    const validExtensions = /\.(mp3|wav|m4a|ogg|mp4)$/i;
+
+    if (file && (validTypes.includes(file.type) || validExtensions.test(file.name))) {
+      if (file.size > 50 * 1024 * 1024) {
+        setMessage({ type: 'error', text: 'حجم فایل نباید بیشتر از 50 مگابایت باشد.' });
+        return;
+      }
+
       const url = URL.createObjectURL(file);
       setAudioBlob(file);
       setAudioUrl(url);
       setMessage({ type: 'success', text: 'فایل با موفقیت بارگذاری شد' });
       setTimeout(() => setMessage({ type: '', text: '' }), 2000);
     } else {
-      setMessage({ type: 'error', text: 'لطفاً یک فایل صوتی معتبر انتخاب کنید' });
+      setMessage({ type: 'error', text: 'لطفاً یک فایل صوتی معتبر انتخاب کنید (MP3, WAV, M4A, OGG)' });
     }
   };
 
@@ -213,7 +289,6 @@ const MeetingRecorder = () => {
     formData.append('title', meetingTitle);
     formData.append('description', meetingDescription);
 
-    // Create filename with timestamp
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `meeting_${timestamp}.wav`;
     const file = new File([audioBlob], filename, { type: 'audio/wav' });
@@ -223,8 +298,10 @@ const MeetingRecorder = () => {
       const response = await axiosInstance.post('/meetings/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setUploadProgress(percent);
+          if (progressEvent.total) {
+            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setUploadProgress(percent);
+          }
         },
       });
 
@@ -238,7 +315,8 @@ const MeetingRecorder = () => {
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     } catch (error) {
       console.error('Upload error:', error);
-      setMessage({ type: 'error', text: 'خطا در آپلود فایل. لطفاً مجدداً تلاش کنید.' });
+      const errorMsg = error.response?.data?.message || 'خطا در آپلود فایل. لطفاً مجدداً تلاش کنید.';
+      setMessage({ type: 'error', text: errorMsg });
     } finally {
       setUploading(false);
       setUploadProgress(0);
@@ -264,48 +342,62 @@ const MeetingRecorder = () => {
       {/* Message */}
       {message.text && (
         <div className={`recorder-message ${message.type}`}>
-          {message.type === 'success' ? <FaCheckCircle /> : <FaExclamationTriangle />}
+          {message.type === 'success' ? <FaCheckCircle /> :
+           message.type === 'warning' ? <FaInfoCircle /> : <FaExclamationTriangle />}
           {message.text}
         </div>
       )}
 
-      <div className="recorder-content">
-        {/* Recording Section */}
-        <div className="recording-section">
-          <div className="section-title">
-            <FaMicrophone /> ضبط مستقیم صدا
+      {/* Microphone Warning */}
+      {!microphoneAvailable && (
+        <div className="mic-warning">
+          <FaExclamationTriangle />
+          <div>
+            <strong>میکروفون یافت نشد!</strong>
+            <p>برای ضبط صدا به میکروفون نیاز دارید. می‌توانید از گزینه آپلود فایل استفاده کنید.</p>
           </div>
+        </div>
+      )}
 
-          <div className="recording-controls">
-            {!isRecording ? (
-              <button
-                className="btn-record"
-                onClick={startRecording}
-                disabled={uploading}
-              >
-                <FaMicrophone /> شروع ضبط
-              </button>
-            ) : (
-              <button
-                className="btn-stop"
-                onClick={stopRecording}
-              >
-                <FaStop /> توقف ضبط
-              </button>
+      <div className="recorder-content">
+        {/* Recording Section - فقط در صورت وجود میکروفون نمایش داده شود */}
+        {microphoneAvailable && (
+          <div className="recording-section">
+            <div className="section-title">
+              <FaMicrophone /> ضبط مستقیم صدا
+            </div>
+
+            <div className="recording-controls">
+              {!isRecording ? (
+                <button
+                  className="btn-record"
+                  onClick={startRecording}
+                  disabled={uploading}
+                >
+                  <FaMicrophone /> شروع ضبط
+                </button>
+              ) : (
+                <button
+                  className="btn-stop"
+                  onClick={stopRecording}
+                >
+                  <FaStop /> توقف ضبط
+                </button>
+              )}
+            </div>
+
+            {isRecording && (
+              <div className="recording-indicator">
+                <div className="recording-wave">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div className="recording-time">
+                  <FaClock /> {formatTime(recordingTime)}
+                </div>
+              </div>
             )}
           </div>
-
-          {isRecording && (
-            <div className="recording-indicator">
-              <div className="recording-wave">
-                <span></span><span></span><span></span><span></span><span></span>
-              </div>
-              <div className="recording-time">
-                <FaClock /> {formatTime(recordingTime)}
-              </div>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Upload Section */}
         <div className="upload-section">

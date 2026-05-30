@@ -18,7 +18,7 @@
   --sidebar-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);
   --logo-filter: brightness(1) invert(0);
   --logo-hover-filter: brightness(0.8);
-  --sidebar-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  --sidebar-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Dark mode */
@@ -36,107 +36,79 @@
   --sidebar-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
   --logo-filter: brightness(0) invert(1);
   --logo-hover-filter: brightness(0.7) invert(1);
-  --sidebar-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-}
-
-/* RTL Support */
-[dir="rtl"] {
-  --sidebar-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-[dir="rtl"].dark-theme,
-[dir="rtl"].dark-theme {
   --sidebar-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Sidebar Container - RTL Support */
+/* ============================================
+   SIDEBAR CONTAINER - RTL (RIGHT SIDE)
+   ============================================ */
 .side-bar-container {
   background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
   height: 100vh;
   overflow-y: auto;
-  width: 255px;
+  width: 260px;
   position: fixed;
   top: 0;
+  right: 0;
   z-index: 100;
   box-shadow: var(--sidebar-shadow);
   transition: all 0.3s ease;
 }
 
-/* LTR (default) */
-.side-bar-container {
-  left: 0;
-}
-
-/* RTL */
-[dir="rtl"] .side-bar-container {
-  left: auto;
-  right: 0;
-}
-
-/* Scrollbar - RTL Support */
+/* ============================================
+   SCROLLBAR
+   ============================================ */
 .side-bar-container::-webkit-scrollbar {
   width: 5px;
 }
 
-[dir="rtl"] .side-bar-container::-webkit-scrollbar {
-  width: 5px;
-}
-
-[dir="rtl"] .side-bar-container::-webkit-scrollbar-track {
+.side-bar-container::-webkit-scrollbar-track {
   background: var(--sidebar-scrollbar-track);
 }
 
-[dir="rtl"] .side-bar-container::-webkit-scrollbar-thumb {
+.side-bar-container::-webkit-scrollbar-thumb {
   background: var(--sidebar-scrollbar-thumb);
   border-radius: 3px;
 }
 
-[dir="rtl"] .side-bar-container::-webkit-scrollbar-thumb:hover {
+.side-bar-container::-webkit-scrollbar-thumb:hover {
   background: var(--sidebar-scrollbar-thumb-hover);
 }
 
-/* Header */
+/* ============================================
+   HEADER & LOGO
+   ============================================ */
 .side-bar-container header {
   padding: 20px 15px;
-  border-bottom: 1px solid var(--sidebar-border);
   margin-bottom: 10px;
-}
-
-/* RTL Header */
-[dir="rtl"] .side-bar-container header {
-  text-align: right;
+  text-align: center;
 }
 
 .navbar-brand {
   display: block;
-}
-
-/* Logo - Theme aware */
-.navbar-brand img {
-  max-width: 210px;
-  height: auto;
-  filter: var(--logo-filter);
-  transition: filter 0.3s ease;
-}
-
-.navbar-brand img:hover {
-  filter: var(--logo-hover-filter);
-}
-
-/* RTL Logo */
-[dir="rtl"] .navbar-brand {
   text-align: center;
 }
 
-/* Menu List - Remove default padding */
+.navbar-brand img {
+  max-width: 210px;
+  height: auto;
+
+
+}
+
+
+/* ============================================
+   MENU LIST
+   ============================================ */
 .side {
-  padding-left: 0;
   padding-right: 0;
   margin-bottom: 5px;
   list-style: none;
 }
 
-/* Menu Header (ul-text) */
+/* ============================================
+   MENU HEADER (ul-text)
+   ============================================ */
 .ul-text {
   padding: 12px 16px;
   margin: 2px 8px;
@@ -164,53 +136,30 @@
 .ul-text i,
 .ul-text svg {
   font-size: 1rem;
-}
-
-/* RTL Icons */
-[dir="rtl"] .ul-text i,
-[dir="rtl"] .ul-text svg {
   margin-left: 10px;
-  margin-right: 0;
-}
-
-/* LTR Icons */
-.ul-text i,
-.ul-text svg {
-  margin-right: 10px;
 }
 
 .ul-text .arrow {
   font-size: 0.75rem;
   transition: transform 0.2s ease;
-}
-
-/* RTL Arrow */
-[dir="rtl"] .ul-text .arrow {
   margin-right: auto;
-  margin-left: 0;
 }
 
-/* LTR Arrow */
-.ul-text .arrow {
-  margin-left: auto;
-}
-
-/* RTL - Rotate arrows for chevron */
-[dir="rtl"] .ul-text .fa-chevron-right {
+/* چرخش آیکون فلش برای RTL */
+.ul-text .fa-chevron-right,
+.ul-text .fa-chevron-left {
   transform: rotate(180deg);
 }
 
-[dir="rtl"] .ul-text .fa-chevron-left {
-  transform: rotate(180deg);
-}
-
-/* Side Item (li) */
+/* ============================================
+   SIDE ITEM (li)
+   ============================================ */
 .side-item {
   list-style: none;
   margin: 2px 0;
 }
 
-/* Direct link (Dashboard) */
+/* لینک مستقیم (مثل Dashboard) */
 .side-item a {
   display: flex;
   align-items: center;
@@ -226,19 +175,7 @@
 .side-item a i,
 .side-item a svg {
   font-size: 1rem;
-}
-
-/* RTL Link Icons */
-[dir="rtl"] .side-item a i,
-[dir="rtl"] .side-item a svg {
   margin-left: 10px;
-  margin-right: 0;
-}
-
-/* LTR Link Icons */
-.side-item a i,
-.side-item a svg {
-  margin-right: 10px;
 }
 
 .side-item a:hover {
@@ -251,11 +188,13 @@
   color: var(--sidebar-text-active);
 }
 
-/* Side Link (for submenu items) */
+/* ============================================
+   SIDE LINK (برای آیتم‌های زیرمنو)
+   ============================================ */
 .side-link {
   display: flex;
   align-items: center;
-  padding: 8px 16px 8px 40px;
+  padding: 8px 40px 8px 16px;
   margin: 2px 8px;
   border-radius: 8px;
   color: var(--sidebar-text);
@@ -268,23 +207,7 @@
 .side-link svg {
   font-size: 0.85rem;
   width: 20px;
-}
-
-/* RTL Side Link */
-[dir="rtl"] .side-link {
-  padding: 8px 40px 8px 16px;
-}
-
-[dir="rtl"] .side-link i,
-[dir="rtl"] .side-link svg {
   margin-left: 10px;
-  margin-right: 0;
-}
-
-/* LTR Side Link */
-.side-link i,
-.side-link svg {
-  margin-right: 10px;
 }
 
 .side-link:hover {
@@ -295,17 +218,7 @@
 .side-link.active {
   background: var(--sidebar-active-bg);
   color: var(--sidebar-text-active);
-}
-
-/* RTL Active Border */
-[dir="rtl"] .side-link.active {
   border-right: 3px solid var(--sidebar-text-active);
-  border-left: none;
-}
-
-/* LTR Active Border */
-.side-link.active {
-  border-left: 3px solid var(--sidebar-text-active);
 }
 
 .side-link.active i,
@@ -313,7 +226,9 @@
   color: var(--sidebar-text-active);
 }
 
-/* Submenu Container */
+/* ============================================
+   SUBMENU CONTAINER
+   ============================================ */
 .side-item-container {
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
@@ -322,24 +237,14 @@
 
 .side-item-container.show {
   max-height: 1000px;
-}
-
-/* RTL Submenu Margin */
-[dir="rtl"] .side-item-container.show {
   margin-right: 14px;
-  margin-left: 0;
-}
-
-/* LTR Submenu Margin */
-.side-item-container.show {
-  margin-left: 14px;
 }
 
 .side-item-container.hide {
   max-height: 0;
 }
 
-/* Animation for submenu */
+/* انیمیشن برای زیرمنو */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -355,47 +260,27 @@
   animation: slideDown 0.2s ease;
 }
 
-/* Active row styles (for tables) */
+/* ============================================
+   ACTIVE/ROW STYLES
+   ============================================ */
 .active-row {
   background: rgba(59, 130, 246, 0.1);
-}
-
-/* RTL Active Row */
-[dir="rtl"] .active-row {
   border-right: 3px solid #3b82f6;
-  border-left: none;
-}
-
-/* LTR Active Row */
-.active-row {
-  border-left: 3px solid #3b82f6;
 }
 
 .selected-row {
   background: rgba(245, 158, 11, 0.1);
-}
-
-/* RTL Selected Row */
-[dir="rtl"] .selected-row {
   border-right: 3px solid #f59e0b;
-  border-left: none;
 }
 
-/* LTR Selected Row */
-.selected-row {
-  border-left: 3px solid #f59e0b;
-}
-
-/* Responsive - RTL Support */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
   .side-bar-container {
-    width: 250px;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-
-  [dir="rtl"] .side-bar-container {
+    width: 280px;
     transform: translateX(100%);
+    transition: transform 0.3s ease;
   }
 
   .side-bar-container.open {
@@ -403,14 +288,12 @@
   }
 }
 
-/* Utility classes - RTL Support */
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
 .mr-1 {
-  margin-right: 4px;
-}
-
-[dir="rtl"] .mr-1 {
-  margin-right: 0;
   margin-left: 4px;
+  margin-right: 0;
 }
 
 .m-2 {
@@ -418,28 +301,22 @@
 }
 
 .pr-1 {
-  padding-right: 4px;
-}
-
-[dir="rtl"] .pr-1 {
-  padding-right: 0;
   padding-left: 4px;
+  padding-right: 0;
 }
 
 .pl-1 {
-  padding-left: 4px;
-}
-
-[dir="rtl"] .pl-1 {
-  padding-left: 0;
   padding-right: 4px;
+  padding-left: 0;
 }
 
 .pb-0 {
   padding-bottom: 0;
 }
 
-/* PLC Menu Specific Styles */
+/* ============================================
+   PLC MENU SPECIFIC STYLES
+   ============================================ */
 .side-link .fa-microchip,
 .side-link .fa-network-wired,
 .side-link .fa-plug,
@@ -451,39 +328,18 @@
 .side-link .fa-chart-line {
   width: 20px;
   text-align: center;
-}
-
-/* RTL PLC Icons */
-[dir="rtl"] .side-link .fa-microchip,
-[dir="rtl"] .side-link .fa-network-wired,
-[dir="rtl"] .side-link .fa-plug,
-[dir="rtl"] .side-link .fa-server,
-[dir="rtl"] .side-link .fa-cloud,
-[dir="rtl"] .side-link .fa-tags,
-[dir="rtl"] .side-link .fa-database,
-[dir="rtl"] .side-link .fa-bell,
-[dir="rtl"] .side-link .fa-chart-line {
   margin-left: 10px;
-  margin-right: 0;
 }
 
-/* Connection status indicator */
+/* ============================================
+   CONNECTION STATUS INDICATOR
+   ============================================ */
 .plc-status-indicator {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-}
-
-/* RTL Status Indicator */
-[dir="rtl"] .plc-status-indicator {
   margin-left: 8px;
-  margin-right: 0;
-}
-
-/* LTR Status Indicator */
-.plc-status-indicator {
-  margin-right: 8px;
 }
 
 .plc-status-connected {
@@ -501,23 +357,118 @@
   box-shadow: 0 0 5px #ffc107;
 }
 
-/* RTL Specific Adjustments for Sidebar Text */
-[dir="rtl"] .ul-text,
-[dir="rtl"] .side-item a,
-[dir="rtl"] .side-link {
+/* ============================================
+   TEXT ALIGNMENT
+   ============================================ */
+.ul-text,
+.side-item a,
+.side-link {
   text-align: right;
 }
 
-/* Fix for Font Awesome icons in RTL */
-[dir="rtl"] .fas.fa-chevron-right,
-[dir="rtl"] .fas.fa-chevron-left {
-  transform: scaleX(-1);
-}
-
-/* Smooth transition for RTL changes */
+/* ============================================
+   SMOOTH TRANSITIONS
+   ============================================ */
 .side-bar-container,
 .side-link,
 .ul-text,
 .side-item a {
   transition: all 0.3s ease-in-out;
+}
+
+/* ============================================
+   FIX FOR RESPONSIVE TOGGLE
+   ============================================ */
+.drawer-toggle-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 110;
+  background: var(--info, #3b82f6);
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .drawer-toggle-btn {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .drawer-toggle-btn {
+    display: none;
+  }
+}
+
+
+/* ============================================
+   LOGO BACKGROUND STYLES
+   ============================================ */
+
+/* Light mode - پس زمینه سفید برای لوگو */
+.light-theme .navbar-brand {
+  background-color: transparent;
+  border-radius: 12px;
+  padding: 8px 16px;
+  margin: 0 auto;
+  display: inline-block;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode - بدون پس زمینه یا شفاف */
+.dark-theme .navbar-brand {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+
+
+/* اطمینان از center بودن لوگو */
+.side-bar-container header {
+  padding: 20px 15px;
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand img {
+  max-width: 180px;
+  height: auto;
+  display: block;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.02);
+}
+
+/* Light mode hover effect */
+.light-theme .navbar-brand:hover {
+
+  transform: translateY(-2px);
+}
+
+/* Dark mode hover effect */
+.dark-theme .navbar-brand:hover {
+
+  transform: translateY(-2px);
 }
