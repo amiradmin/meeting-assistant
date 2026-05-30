@@ -14,15 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.http import JsonResponse
+from django.views.static import serve
+import os
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
-from django.http import JsonResponse
-
 
 def health_check(request):
     return JsonResponse({'status': 'ok', 'service': 'backend'})
@@ -39,6 +44,8 @@ def api_root(request):
             },
             'api': '/api/',
             'admin': '/admin/',
+            'health': '/health/',
+            'media': '/media/',
         }
     })
 
@@ -56,3 +63,13 @@ urlpatterns = [
     # Meetings app APIs
     path('api/', include('meetings.urls')),
 ]
+
+# سرویس فایل‌های مدیا در حالت DEBUG
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static('/uploads/', document_root=settings.UPLOAD_ROOT)
+
+    # همچنین یک مسیر مستقیم برای دسترسی به فایل‌ها
+    urlpatterns += [
+        path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+    ]
