@@ -1,69 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import ThemeToggle from "../ThemeToggle";  // اضافه کنید
+import ThemeToggle from "../ThemeToggle";
+import "./DashboardLayout.css";
 
 const DashboardLayout = () => {
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const toggleDrawer = () => setDrawerOpen((prev) => !prev);
+  // بررسی سایز صفحه
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
-    <div
-      className={`bmd-layout-container bmd-drawer-f-l avam-container animated ${
-        drawerOpen ? "bmd-drawer-in" : "bmd-drawer-out"
-      }`}
-    >
-      {/* دکمه همبرگر برای موبایل */}
-      <button
-        className="drawer-toggle-btn"
-        onClick={toggleDrawer}
-        style={{
-          position: 'fixed',
-          top: '16px',
-          left: '16px',
-          zIndex: 1000,
-          background: '#3b82f6',
-          border: 'none',
-          borderRadius: '8px',
-          width: '40px',
-          height: '40px',
-          color: 'white',
-          cursor: 'pointer',
-          display: 'none',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
+    <div className={`dashboard-layout ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+      {/* دکمه منو برای موبایل */}
+      <button className="menu-toggle" onClick={toggleSidebar}>
         <i className="fas fa-bars"></i>
       </button>
 
-      <div
-        id="dw-s1"
-        className={`bmd-layout-drawer bg-faded ${
-          drawerOpen ? "bmd-drawer-in" : "bmd-drawer-out"
-        }`}
-      >
+      {/* سایدبار */}
+      <aside className="sidebar">
         <Sidebar />
-      </div>
+      </aside>
 
-      <main className="bmd-layout-content" style={{ minHeight: "100vh" }}>
-        {/* هدر با دکمه تم */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          padding: '12px 24px',
-
-
-          position: 'sticky',
-          top: 0,
-          zIndex: 99
-        }}>
+      {/* محتوای اصلی */}
+      <main className="main-content">
+        <div className="header">
           <ThemeToggle />
         </div>
-
-        <div className="container-fluid">
+        <div className="content">
           <Outlet />
         </div>
       </main>

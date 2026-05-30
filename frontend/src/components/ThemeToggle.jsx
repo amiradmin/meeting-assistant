@@ -1,38 +1,51 @@
 // src/components/ThemeToggle.jsx
 import React from 'react';
-import { FaSun, FaMoon } from 'react-icons/fa';
+import { FaMoon, FaSun, FaLanguage } from 'react-icons/fa';
 import { useTheme } from '../theme';
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, direction, toggleTheme, toggleDirection } = useTheme();
 
   return (
-    <button
-      onClick={toggleTheme}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '8px 16px',
-        background: 'var(--bg-tertiary, #f1f5f9)',
-        border: '1px solid var(--border-color, #e2e8f0)',
-        borderRadius: '30px',
-        cursor: 'pointer',
-        color: 'var(--text-primary, #1e293b)',
-        transition: 'all 0.3s ease',
-        fontSize: '0.85rem',
-        fontWeight: 500
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'scale(1.02)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'scale(1)';
-      }}
-    >
-      {theme === 'light' ? <FaMoon size={14} /> : <FaSun size={14} />}
-      <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
-    </button>
+    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <button
+        onClick={toggleDirection}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '20px',
+          padding: '8px',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px',
+          color: 'inherit'
+        }}
+        title={direction === 'rtl' ? 'تغییر به چپ به راست' : 'Switch to RTL'}
+      >
+        <FaLanguage />
+        <span style={{ fontSize: '12px' }}>{direction === 'rtl' ? 'EN' : 'FA'}</span>
+      </button>
+
+      <button
+        onClick={toggleTheme}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '20px',
+          padding: '8px',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          color: 'inherit'
+        }}
+        title={theme === 'dark' ? 'حالت روشن' : 'حالت تاریک'}
+      >
+        {theme === 'dark' ? <FaSun /> : <FaMoon />}
+      </button>
+    </div>
   );
 };
 

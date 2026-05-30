@@ -14,7 +14,6 @@ const LoginPage = () => {
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         if (token) {
-            // If already logged in, redirect to dashboard
             navigate('/');
         }
     }, [navigate]);
@@ -75,7 +74,6 @@ const LoginPage = () => {
         setIsLoading(true);
 
         try {
-            // Connect to the working backend endpoint
             const response = await fetch('http://localhost:8000/api/token/', {
                 method: 'POST',
                 headers: {
@@ -91,15 +89,27 @@ const LoginPage = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Successful login
-                const { access, refresh, user } = data;
+                const { access, refresh } = data;
 
-                // Store tokens
                 localStorage.setItem('access_token', access);
                 localStorage.setItem('refresh_token', refresh);
-                localStorage.setItem('user', JSON.stringify(user));
 
-                // Handle "Remember Me"
+                // Get user info
+                try {
+                    const userResponse = await fetch('http://localhost:8000/api/user/', {
+                        headers: {
+                            'Authorization': `Bearer ${access}`,
+                            'Accept': 'application/json',
+                        },
+                    });
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+                        localStorage.setItem('user', JSON.stringify(userData));
+                    }
+                } catch (err) {
+                    console.error('Error fetching user info:', err);
+                }
+
                 if (rememberMe) {
                     localStorage.setItem('rememberMe', 'true');
                     localStorage.setItem('savedUsername', username.trim());
@@ -108,10 +118,8 @@ const LoginPage = () => {
                     localStorage.removeItem('savedUsername');
                 }
 
-                // Redirect to dashboard
                 navigate('/');
             } else {
-                // Handle errors
                 if (data.detail) {
                     setError(data.detail);
                 } else if (data.error) {
@@ -129,43 +137,13 @@ const LoginPage = () => {
     };
 
     const handleForgotPassword = () => {
-        alert('لطفاً با پشتیبانی سیستم تماس بگیرید: ۰۲۱-XXXX-XXXX');
+        alert('لطفاً با مدیر سیستم تماس بگیرید');
     };
-
-    // EAF SVG Icon Component
-    const EAFIcon = () => (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M12 2L2 7L12 12L22 7L12 2Z"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-                fill="rgba(255,255,255,0.2)"
-            />
-            <path
-                d="M2 17L12 22L22 17"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-            />
-            <path
-                d="M2 12L12 17L22 12"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                fill="none"
-            />
-            <circle cx="12" cy="12" r="2" fill="#00d4ff" stroke="none"/>
-        </svg>
-    );
 
     const currentYear = new Date().getFullYear();
 
     return (
-        <div className="login-wrapper">
+        <div className="login-wrapper" dir="rtl">
             <div className="glow-orb-1"></div>
             <div className="glow-orb-2"></div>
 
@@ -173,19 +151,20 @@ const LoginPage = () => {
                 <div className="login-card">
                     <div className="logo-area">
                         <div className="logo-icon">
-                            <img
-                                src="/images/mianeh_logo (1).png"
-                                alt="مجتمع فولاد میانه"
-                                className="company-logo1"
-                                style={{
-                                    width: '300px',
-                                    height: '180px',
-                                    objectFit: 'contain'
-                                }}
-                            />
+                            <div className="meeting-logo">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#667eea" strokeWidth="1.5" strokeLinejoin="round" fill="rgba(102,126,234,0.2)"/>
+                                    <path d="M2 17L12 22L22 17" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                                    <path d="M2 12L12 17L22 12" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                                    <path d="M8 8L16 8" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round"/>
+                                    <path d="M8 12L13 12" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round"/>
+                                    <circle cx="12" cy="12" r="2" fill="#667eea"/>
+                                    <path d="M19 4L21 6L19 8" stroke="#667eea" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
                         </div>
-                        <br />
-                        <div className="subtitle">سیستم کنترل سطح ۲</div>
+                        <h1 className="app-title">دستیار جلسات</h1>
+                        <div className="subtitle">سیستم هوشمند تبدیل صدا به صورت جلسه</div>
                     </div>
 
                     <form onSubmit={handleSubmit}>
@@ -198,11 +177,10 @@ const LoginPage = () => {
                                 className="input-field"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                placeholder="نام کاربری / شناسه پرسنلی"
+                                placeholder="نام کاربری خود را وارد کنید"
                                 required
                                 autoComplete="username"
                                 disabled={isLoading}
-                                dir="ltr"
                             />
                         </div>
 
@@ -217,7 +195,6 @@ const LoginPage = () => {
                                 required
                                 autoComplete="current-password"
                                 disabled={isLoading}
-                                dir="ltr"
                             />
                         </div>
 
@@ -229,7 +206,7 @@ const LoginPage = () => {
                                     onChange={(e) => setRememberMe(e.target.checked)}
                                     disabled={isLoading}
                                 />
-                                مرا به خاطر بسپار
+                                <span>مرا به خاطر بسپار</span>
                             </label>
                             <button
                                 type="button"
@@ -257,18 +234,33 @@ const LoginPage = () => {
                         </button>
 
                         <div className="system-info">
-                            <span>سامانه نظارت و بهینه‌سازی ذوب</span>
+                            <span>سیستم تبدیل خودکار جلسات به صورت جلسه</span>
                             <br />
                             <span className="version-badge">
-                                PCS Release 6.0 | EAF Optimizer
+                                Meeting Assistant v1.0 | مبتنی بر هوش مصنوعی
                             </span>
+                        </div>
+
+                        <div className="features">
+                            <div className="feature-item">
+                                <span>🎤</span>
+                                <span>ضبط هوشمند صدا</span>
+                            </div>
+                            <div className="feature-item">
+                                <span>📝</span>
+                                <span>تبدیل به متن</span>
+                            </div>
+                            <div className="feature-item">
+                                <span>🤖</span>
+                                <span>خلاصه‌سازی با AI</span>
+                            </div>
                         </div>
 
                         <div className="copyright">
                             <div className="developer-line">
-                                <span className="company-name">MITE Co</span>
+                                <span className="company-name">دستیار جلسات</span>
                                 <span className="separator-dot">•</span>
-                                <span>شرکت مهندسی فن آور صنعت مدائن</span>
+                                <span>سیستم مدیریت هوشمند جلسات</span>
                             </div>
                             <div className="rights-line">
                                 © {currentYear} | تمامی حقوق محفوظ است

@@ -1,100 +1,218 @@
-/* Smooth transitions */
-.bmd-layout-container {
-  transition: all 0.3s ease-in-out;
-}
-
-.bmd-layout-drawer {
-  transition: all 0.3s ease-in-out;
-}
-
-/* Drawer widths */
-.drawer-open {
-  transform: translateX(0) !important;
-}
-
-.drawer-closed {
-  transform: translateX(-260px) !important;
-}
-
-/* Main content spacing */
-.main-content-area {
+/* داشبورد لایه‌بندی اصلی */
+.dashboard-layout {
+  display: flex;
   min-height: 100vh;
-  transition: margin-left 0.3s ease;
+  direction: rtl;
+  position: relative;
 }
 
-/* Desktop: drawer open shifts main content */
-@media (min-width: 992px) {
-  .drawer-open ~ .bmd-layout-content {
-    margin-left: 260px !important;
-  }
-
-  .drawer-closed ~ .bmd-layout-content {
-    margin-left: 0 !important;
-  }
+/* ============================================
+   سایدبار
+   ============================================ */
+.sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: var(--sidebar-bg, #ffffff);
+  border-left: 1px solid var(--border-color, #e2e8f0);
+  transition: all 0.3s ease-in-out;
+  z-index: 100;
+  overflow-y: auto;
 }
 
-/* Mobile mode */
-@media (max-width: 991px) {
-  /* Sidebar becomes overlay */
-  .bmd-layout-drawer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 260px;
-    height: 100%;
-    z-index: 2000 !important;
-    background: #fff;
-    box-shadow: 0 0 10px #0003;
+/* وقتی سایدبار باز است */
+.sidebar-open .sidebar {
+  transform: translateX(0);
+}
+
+/* وقتی سایدبار بسته است */
+.sidebar-closed .sidebar {
+  transform: translateX(100%);
+}
+
+/* ============================================
+   محتوای اصلی
+   ============================================ */
+.main-content {
+  flex: 1;
+  min-height: 100vh;
+  transition: all 0.3s ease-in-out;
+  background: var(--bg-primary, #f5f7fa);
+  width: 100%;
+}
+
+/* وقتی سایدبار باز است - محتوا به اندازه سایدبار فاصله می‌گیرد */
+.sidebar-open .main-content {
+  margin-right: 260px;
+  width: calc(100% - 260px);
+}
+
+/* وقتی سایدبار بسته است - محتوا تمام صفحه را می‌گیرد */
+.sidebar-closed .main-content {
+  margin-right: 0;
+  width: 100%;
+}
+
+/* ============================================
+   هدر
+   ============================================ */
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 24px;
+  background: var(--card-bg, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+/* ============================================
+   محتوای داخل صفحه
+   ============================================ */
+.content {
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ============================================
+   دکمه منو برای موبایل
+   ============================================ */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background: var(--info, #3b82f6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 101;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle:hover {
+  background: var(--info-dark, #2563eb);
+}
+
+/* ============================================
+   موبایل (عرض کمتر از 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
   }
 
-  /* Dark backdrop when open */
-  .drawer-open::after {
+  .sidebar {
+    width: 280px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-closed .sidebar {
+    transform: translateX(100%);
+  }
+
+  .sidebar-open .main-content {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  /* افکت محو برای پس‌زمینه وقتی سایدبار باز است */
+  .sidebar-open::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1500;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
   }
 
-  /* Main content takes full width */
-  .main-content-area {
-    margin-left: 0 !important;
+  .content {
+    padding: 15px;
+  }
+
+  .header {
+    padding: 10px 16px;
   }
 }
 
-/* برای نمایش دکمه همبرگر فقط در موبایل */
+/* ============================================
+   RTL تنظیمات ویژه
+   ============================================ */
+[dir="rtl"] .sidebar {
+  right: 0;
+  left: auto;
+  border-left: 1px solid var(--border-color, #e2e8f0);
+  border-right: none;
+}
+
+[dir="rtl"] .sidebar-open .main-content {
+  margin-right: 260px;
+  margin-left: 0;
+}
+
+[dir="rtl"] .menu-toggle {
+  right: 16px;
+  left: auto;
+}
+
 @media (max-width: 768px) {
-  .drawer-toggle-btn {
-    display: flex !important;
-  }
-
-  /* تنظیم موقعیت drawer در موبایل */
-  .bmd-drawer-f-l .bmd-layout-drawer {
-    transform: translateX(-280px);
-    transition: transform 0.3s ease;
-  }
-
-  .bmd-drawer-f-l.bmd-drawer-in .bmd-layout-drawer {
-    transform: translateX(0);
-  }
-
-  .bmd-layout-content {
-    width: 100%;
-    padding-left: 0;
+  [dir="rtl"] .sidebar-open .main-content {
+    margin-right: 0;
   }
 }
 
-/* در دسکتاپ drawer همیشه باز باشد */
-@media (min-width: 769px) {
-  .bmd-drawer-f-l .bmd-layout-drawer {
-    transform: translateX(0) !important;
-  }
+/* ============================================
+   اسکرول برای سایدبار
+   ============================================ */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
 
-  .bmd-layout-content {
-    margin-left: 280px;
-    width: calc(100% - 280px);
-  }
+.sidebar::-webkit-scrollbar-track {
+  background: var(--bg-secondary, #f1f5f9);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-color, #cbd5e1);
+  border-radius: 4px;
+}
+
+/* ============================================
+   اطمینان از پر شدن فضای خالی
+   ============================================ */
+.dashboard-layout,
+#root,
+body,
+html {
+  width: 100%;
+  min-height: 100vh;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  direction: rtl;
+  overflow-x: hidden;
 }
