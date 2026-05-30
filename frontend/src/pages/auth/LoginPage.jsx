@@ -162,7 +162,7 @@ const LoginPage = () => {
           />
                             </div>
                         </div>
-                      
+
                         <div className="subtitle">سیستم هوشمند تبدیل صدا به صورت جلسه</div>
                     </div>
 
