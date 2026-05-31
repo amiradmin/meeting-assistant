@@ -13,7 +13,6 @@ import logging
 
 from .models import Meeting
 from .serializers import MeetingSerializer, MeetingCreateSerializer, MeetingStatusSerializer
-from .tasks import process_meeting_audio
 
 logger = logging.getLogger(__name__)
 
@@ -43,14 +42,14 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
         meeting = serializer.save()
 
-        # اجرای تسک پس‌زمینه برای پردازش با error handling
+        # پردازش همزمان (بدون Celery)
         try:
-            process_meeting_audio.delay(meeting.id)
-            logger.info(f"Task started for meeting {meeting.id}")
+            from .tasks import process_meeting_audio
+            process_meeting_audio(meeting.id)  # اجرای مستقیم، بدون delay
+            logger.info(f"Meeting {meeting.id} processed successfully")
         except Exception as e:
-            logger.error(f"Failed to start task for meeting {meeting.id}: {str(e)}")
-            # اگر celery در دسترس نبود، meeting را با status pending نگه دار
-            meeting.status = 'pending'
+            logger.error(f"Failed to process meeting {meeting.id}: {str(e)}")
+            meeting.status = 'failed'
             meeting.save()
 
         return Response(
@@ -71,9 +70,11 @@ class MeetingViewSet(viewsets.ModelViewSet):
             meeting.status = 'pending'
             meeting.save()
             try:
-                process_meeting_audio.delay(meeting.id)
+                from .tasks import process_meeting_audio
+                process_meeting_audio(meeting.id)  # اجرای مستقیم
+                logger.info(f"Meeting {meeting.id} retry successful")
             except Exception as e:
-                logger.error(f"Failed to retry task: {str(e)}")
+                logger.error(f"Failed to retry meeting {meeting.id}: {str(e)}")
                 return Response({'error': 'خطا در شروع پردازش مجدد'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response({'message': 'پردازش مجدد شروع شد'}, status=status.HTTP_200_OK)
         return Response(
