@@ -16,3 +16,4 @@ python-snap7
 celery>=5.3.0
 requests>=2.31.0
 whitenoise>=6.6.0
+setuptools==65.5.0

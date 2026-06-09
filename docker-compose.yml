@@ -105,7 +105,7 @@ services:
 
   # Ollama
   ollama:
-    image: ollama/ollama:0.1.30
+    image: ollama/ollama:latest
     container_name: meeting_ollama
     restart: unless-stopped
     volumes:
@@ -210,12 +210,18 @@ services:
       - "8001:8001"
     networks:
       - meeting_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    environment:
+      - MODEL_TYPE=persian-large
+      - MODEL_SIZE=medium
+      - HOST=0.0.0.0
+      - PORT=8001
+    # Comment out or remove healthcheck temporarily
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s
 
 volumes:
   postgres_data:

@@ -1,55 +1,37 @@
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
+RUN sed -i 's|deb.debian.org|linux-mirror.liara.ir/repository|g' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's|security.debian.org|linux-mirror.liara.ir/repository-security|g' /etc/apt/sources.list.d/debian.sources
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    ffmpeg \
     curl \
-    libsndfile1 \
-    wget \
-    --no-install-recommends \
+    ffmpeg \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
-# آپدیت pip
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Copy requirements
+COPY requirements.txt .
 
-# ایجاد پوشه برای دانلود
-RUN mkdir -p /tmp/packages
 
-# دانلود torch با آدرس صحیح
-RUN wget -c -P /tmp/packages \
-    https://download.pytorch.org/whl/cpu/torch-2.1.2%2Bcpu-cp310-cp310-linux_x86_64.whl || \
-    wget -c -P /tmp/packages \
-    https://files.pythonhosted.org/packages/ce/65/7c7e3ad48467ba8a70f5f41fc83a65e66b2fade089a7ce6e93d7ec3975ba/torch-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl
 
-# دانلود torchaudio
-RUN wget -c -P /tmp/packages \
-    https://download.pytorch.org/whl/cpu/torchaudio-2.1.2%2Bcpu-cp310-cp310-linux_x86_64.whl || \
-    wget -c -P /tmp/packages \
-    https://files.pythonhosted.org/packages/68/c4/3a44a5bceb18c8820e873ebdcdb8933a9f3bb660479b1552fa860673c5b5/torchaudio-2.1.2-cp310-cp310-manylinux_2_28_x86_64.whl
-
-# نصب از فایل‌های محلی (اگر دانلود شده باشد)
-RUN pip install --no-cache-dir /tmp/packages/*.whl || true
-
-# نصب بقیه پکیج‌ها
+# Install Python packages
 RUN pip install --no-cache-dir \
-    --retries=10 \
-    --timeout=600 \
-    fastapi \
-    uvicorn[standard] \
-    redis \
-    python-multipart \
-    numpy \
-    tqdm \
-    more-itertools \
-    transformers \
-    openai-whisper
+    -i https://package-mirror.liara.ir/repository/pypi/simple/ \
+    --trusted-host package-mirror.liara.ir \
+    --upgrade pip
+RUN  pip install --no-cache-dir \
+    --timeout 300 \
+    --retries 5 \
+    -i https://mirrors.aliyun.com/pypi/simple/  \
+    --trusted-host https://mirrors.aliyun.com \
+    -r requirements.txt
 
+# Copy application
 COPY main.py .
-
-RUN mkdir -p /app/uploads
 
 EXPOSE 8001
 
-CMD ["python", "main.py"]
+# Run with python directly
+CMD ["python", "-u", "main.py"]

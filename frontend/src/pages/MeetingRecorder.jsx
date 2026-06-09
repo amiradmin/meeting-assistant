@@ -42,16 +42,22 @@ const MeetingRecorder = () => {
   const [microphoneAvailable, setMicrophoneAvailable] = useState(true);
   const [audioDevices, setAudioDevices] = useState([]);
 
+  // State برای نوار پیشرفت تدریجی
+  const [processingStep, setProcessingStep] = useState('');
+  const [processingProgress, setProcessingProgress] = useState(0);
+
   // Refs
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const audioPlayerRef = useRef(null);
   const timerRef = useRef(null);
+  const progressIntervalRef = useRef(null);
+  const startTimeRef = useRef(null);
 
   // Axios instance with auth
   const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 300000,
+    timeout: 12000000,
   });
 
   axiosInstance.interceptors.request.use(
@@ -106,7 +112,6 @@ const MeetingRecorder = () => {
     fetchRecentMeetings();
     checkAudioDevices();
 
-    // Listen for device changes
     if (navigator.mediaDevices) {
       navigator.mediaDevices.addEventListener('devicechange', checkAudioDevices);
       return () => {
@@ -115,12 +120,73 @@ const MeetingRecorder = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (processingId) {
-      const interval = setInterval(checkProcessingStatus, 3000);
-      return () => clearInterval(interval);
+  // شروع شبیه‌سازی پیشرفت تدریجی بر اساس زمان واقعی
+  const startGradualProgress = () => {
+    setProcessingProgress(0);
+    startTimeRef.current = Date.now();
+
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
     }
-  }, [processingId]);
+
+    // پیشرفت تدریجی هر 500 میلی‌ثانیه
+    progressIntervalRef.current = setInterval(() => {
+      const elapsed = (Date.now() - startTimeRef.current) / 1000; // ثانیه
+      let targetProgress = 0;
+
+      // محاسبه پیشرفت بر اساس زمان سپری شده
+      // آپلود: 0-10 ثانیه
+      if (elapsed <= 10) {
+        targetProgress = Math.min(20, (elapsed / 10) * 20);
+        setProcessingStep('uploading');
+      }
+      // تبدیل صدا به متن: 10-50 ثانیه (برای فایل 15 دقیقه‌ای)
+      else if (elapsed <= 50) {
+        targetProgress = 20 + ((elapsed - 10) / 40) * 40;
+        setProcessingStep('transcribing');
+      }
+      // خلاصه‌سازی: 50-80 ثانیه
+      else if (elapsed <= 80) {
+        targetProgress = 60 + ((elapsed - 50) / 30) * 30;
+        setProcessingStep('summarizing');
+      }
+      // تکمیل نهایی
+      else {
+        targetProgress = 95;
+      }
+
+      setProcessingProgress(Math.min(95, Math.floor(targetProgress)));
+    }, 500);
+  };
+
+  // به روز رسانی بر اساس وضعیت واقعی از سرور
+  const updateProgressFromStatus = (status) => {
+    if (status === 'transcribing') {
+      setProcessingStep('transcribing');
+      // اگر پیشرفت کمتر از 30 است، به 30 برسان
+      setProcessingProgress(prev => Math.max(prev, 30));
+    } else if (status === 'summarizing') {
+      setProcessingStep('summarizing');
+      // اگر پیشرفت کمتر از 60 است، به 60 برسان
+      setProcessingProgress(prev => Math.max(prev, 60));
+    } else if (status === 'completed') {
+      setProcessingStep('completed');
+      setProcessingProgress(100);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+      setTimeout(() => {
+        setProcessingStep('');
+        setProcessingProgress(0);
+      }, 2000);
+    } else if (status === 'failed') {
+      setProcessingStep('');
+      setProcessingProgress(0);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    }
+  };
 
   // Check processing status
   const checkProcessingStatus = async () => {
@@ -128,6 +194,8 @@ const MeetingRecorder = () => {
 
     try {
       const response = await axiosInstance.get(`/meetings/${processingId}/status/`);
+      updateProgressFromStatus(response.data.status);
+
       if (response.data.status === 'completed') {
         setMessage({ type: 'success', text: 'جلسه با موفقیت پردازش شد!' });
         setProcessingId(null);
@@ -141,6 +209,19 @@ const MeetingRecorder = () => {
       console.error('Error checking status:', error);
     }
   };
+
+  useEffect(() => {
+    if (processingId) {
+      startGradualProgress();
+      const interval = setInterval(checkProcessingStatus, 2000);
+      return () => {
+        clearInterval(interval);
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+        }
+      };
+    }
+  }, [processingId]);
 
   // Start recording
   const startRecording = async () => {
@@ -284,6 +365,9 @@ const MeetingRecorder = () => {
 
     setUploading(true);
     setUploadProgress(0);
+    setProcessingStep('uploading');
+    setProcessingProgress(0);
+    startGradualProgress();
 
     const formData = new FormData();
     formData.append('title', meetingTitle);
@@ -301,6 +385,8 @@ const MeetingRecorder = () => {
           if (progressEvent.total) {
             const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setUploadProgress(percent);
+            // پیشرفت آپلود مستقیماً روی نوار تأثیر می‌گذارد
+            setProcessingProgress(prev => Math.max(prev, Math.floor(percent * 0.2)));
           }
         },
       });
@@ -317,6 +403,11 @@ const MeetingRecorder = () => {
       console.error('Upload error:', error);
       const errorMsg = error.response?.data?.message || 'خطا در آپلود فایل. لطفاً مجدداً تلاش کنید.';
       setMessage({ type: 'error', text: errorMsg });
+      setProcessingStep('');
+      setProcessingProgress(0);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
     } finally {
       setUploading(false);
       setUploadProgress(0);
@@ -326,6 +417,17 @@ const MeetingRecorder = () => {
   // View meeting details
   const viewMeetingDetails = (id) => {
     navigate(`/meeting/${id}`);
+  };
+
+  // Get step label
+  const getStepLabel = () => {
+    switch (processingStep) {
+      case 'uploading': return 'در حال آپلود فایل...';
+      case 'transcribing': return 'در حال تبدیل صدا به متن...';
+      case 'summarizing': return 'در حال تولید صورت جلسه...';
+      case 'completed': return 'پردازش کامل شد!';
+      default: return 'در حال پردازش...';
+    }
   };
 
   return (
@@ -360,7 +462,7 @@ const MeetingRecorder = () => {
       )}
 
       <div className="recorder-content">
-        {/* Recording Section - فقط در صورت وجود میکروفون نمایش داده شود */}
+        {/* Recording Section */}
         {microphoneAvailable && (
           <div className="recording-section">
             <div className="section-title">
@@ -527,14 +629,50 @@ const MeetingRecorder = () => {
         )}
       </div>
 
-      {/* Processing Modal */}
-      {processingId && (
+      {/* Processing Modal with Gradual Progress Bar */}
+      {(processingId || processingStep) && (
         <div className="processing-overlay">
           <div className="processing-modal">
-            <FaSpinner className="spin large" />
-            <h3>در حال پردازش جلسه</h3>
-            <p>لطفاً منتظر بمانید...</p>
-            <small>تبدیل صدا به متن و تولید صورت جلسه</small>
+            {processingStep !== 'completed' ? (
+              <>
+                <FaSpinner className="spin large" />
+                <h3>در حال پردازش جلسه</h3>
+                <p>{getStepLabel()}</p>
+                <p className="progress-time-note">زمان تقریبی: حدود {Math.max(1, Math.ceil((100 - processingProgress) / 2))} ثانیه</p>
+
+                {/* نوار پیشرفت تدریجی */}
+                <div className="progress-bar-container">
+                  <div
+                    className="progress-bar-fill"
+                    style={{ width: `${processingProgress}%` }}
+                  >
+                    <span className="progress-bar-text">{processingProgress}%</span>
+                  </div>
+                </div>
+
+                {/* مراحل پردازش */}
+                <div className="processing-steps">
+                  <div className={`step ${processingProgress >= 5 ? 'completed' : ''} ${processingStep === 'uploading' ? 'active' : ''}`}>
+                    <span>📤</span> آپلود
+                  </div>
+                  <div className={`step ${processingProgress >= 30 ? 'completed' : ''} ${processingStep === 'transcribing' ? 'active' : ''}`}>
+                    <span>🎤</span> تبدیل صدا
+                  </div>
+                  <div className={`step ${processingProgress >= 70 ? 'completed' : ''} ${processingStep === 'summarizing' ? 'active' : ''}`}>
+                    <span>🤖</span> خلاصه‌سازی
+                  </div>
+                  <div className={`step ${processingProgress >= 95 ? 'completed' : ''}`}>
+                    <span>✅</span> نهایی‌سازی
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <FaCheckCircle className="success-icon" />
+                <h3>پردازش با موفقیت انجام شد!</h3>
+                <p>در حال انتقال به صفحه جلسه...</p>
+              </>
+            )}
           </div>
         </div>
       )}
